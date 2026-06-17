@@ -25,6 +25,8 @@
 </head>
 <body>
 
+  <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+
   <!-- ============ NAV ============ -->
   <header class="nav" id="nav">
     <div class="container nav__inner">
@@ -192,16 +194,26 @@
           <p class="eyebrow">Funkcje</p>
           <h2>Wszystko, by <span class="grad">w sekundę ocenić każde zlecenie.</span></h2>
         </div>
-        <div class="feature-grid">
-          <article class="feature reveal">
+        <div class="feature-grid bento">
+          <article class="feature feature--wide reveal">
             <div class="feature__ic" aria-hidden="true">⚡</div>
             <h3>zł/h w czasie rzeczywistym</h3>
             <p>Najważniejsza liczba kuriera, wyliczana z kwoty, czasu i dystansu — od razu, nad zleceniem.</p>
+            <div class="feature__viz feature__viz--rate" aria-hidden="true">
+              <span class="viz-pill viz-pill--g">44 zł/h</span>
+              <span class="viz-pill">2,9 zł/km</span>
+              <span class="viz-pill">18,35 zł</span>
+            </div>
           </article>
-          <article class="feature reveal">
+          <article class="feature feature--wide reveal">
             <div class="feature__ic feature__ic--lights" aria-hidden="true"><span></span><span></span><span></span></div>
             <h3>Kolor: brać czy odpuścić</h3>
             <p>Zielony, żółty, czerwony. Nie musisz nic czytać — kolor mówi wszystko jednym spojrzeniem.</p>
+            <div class="feature__viz feature__viz--lights" aria-hidden="true">
+              <span class="big-light big-light--g"></span>
+              <span class="big-light big-light--y"></span>
+              <span class="big-light big-light--r"></span>
+            </div>
           </article>
           <article class="feature reveal">
             <div class="feature__ic" aria-hidden="true">🔀</div>
@@ -266,7 +278,7 @@
         <p class="proof__sub">OrderPilot jest dostępny publicznie w Google Play i używany przez kurierów na realnych zleceniach.</p>
         <ul class="proof__stats">
           <li><span class="proof__big proof__big--live"><span class="dot dot--live"></span>LIVE</span><span class="proof__cap">w Google Play</span></li>
-          <li><span class="proof__big">177</span><span class="proof__cap">krajów</span></li>
+          <li><span class="proof__big" data-count="177">177</span><span class="proof__cap">krajów</span></li>
           <li><span class="proof__big">v1.0.5</span><span class="proof__cap">stabilna wersja</span></li>
           <li><span class="proof__big">0 zł</span><span class="proof__cap">za pobranie</span></li>
         </ul>

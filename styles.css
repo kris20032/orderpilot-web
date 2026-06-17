@@ -360,6 +360,82 @@ section { position: relative; }
 .reveal { opacity: 0; transform: translateY(26px); transition: opacity .7s var(--ease), transform .7s var(--ease); }
 .reveal.in { opacity: 1; transform: none; }
 
+/* ============================================================
+   Efekty inspirowane 21st.dev / Aceternity / Magic UI
+   (czysty CSS/JS, subtelnie i profesjonalnie)
+   ============================================================ */
+
+/* pasek postępu scrolla */
+.scroll-progress {
+  position: fixed; top: 0; left: 0; height: 3px; width: 0;
+  background: linear-gradient(90deg, var(--orange), var(--orange-2));
+  box-shadow: 0 0 12px rgba(255,107,44,.6); z-index: 200;
+}
+
+/* animowany gradient w akcentach nagłówków */
+.grad {
+  background: linear-gradient(100deg, var(--orange-2), var(--orange), #ffd0a8, var(--orange));
+  background-size: 220% 100%;
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  animation: grad-shift 7s ease-in-out infinite;
+}
+@keyframes grad-shift { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+
+/* aurora — delikatny dryf poświaty w hero */
+.hero__glow { animation: aurora 14s ease-in-out infinite; }
+@keyframes aurora {
+  0%,100% { transform: translate(0,0) scale(1); opacity: .9; }
+  50%     { transform: translate(-44px,32px) scale(1.12); opacity: 1; }
+}
+
+/* spotlight / magic card — poświata podążająca za kursorem */
+.feature, .step, .compare__col { position: relative; overflow: hidden; }
+.feature > *, .step > *, .compare__col > * { position: relative; z-index: 1; }
+.feature::before, .step::before, .compare__col::before {
+  content: ""; position: absolute; inset: 0; z-index: 0; border-radius: inherit; pointer-events: none;
+  background: radial-gradient(260px circle at var(--mx, 50%) var(--my, -30%), rgba(255,138,61,.16), transparent 65%);
+  opacity: 0; transition: opacity .35s var(--ease);
+}
+.feature:hover::before, .step:hover::before, .compare__col:hover::before { opacity: 1; }
+
+/* bento grid — funkcje w zróżnicowanej siatce */
+.feature-grid.bento { grid-template-columns: repeat(4, 1fr); grid-auto-rows: 1fr; }
+.feature--wide { grid-column: span 2; display: flex; flex-direction: column; }
+.feature__viz { margin-top: auto; padding-top: 22px; display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.viz-pill {
+  font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1.02rem;
+  padding: 8px 14px; border-radius: 12px; background: rgba(255,255,255,.05);
+  border: 1px solid var(--line-strong); color: var(--text);
+}
+.viz-pill--g { background: linear-gradient(180deg,#3ddc84,#22c46c); color: #06210f; border-color: transparent; box-shadow: 0 8px 22px -8px rgba(52,210,123,.5); }
+.feature__viz--lights { gap: 16px; }
+.big-light { width: 30px; height: 30px; border-radius: 50%; }
+.big-light--g { background: var(--green);  box-shadow: 0 0 22px var(--green);  animation: blink 2.6s infinite; }
+.big-light--y { background: var(--yellow); box-shadow: 0 0 22px var(--yellow); animation: blink 2.6s infinite .85s; }
+.big-light--r { background: var(--red);    box-shadow: 0 0 22px var(--red);    animation: blink 2.6s infinite 1.7s; }
+@keyframes blink { 0%,66%,100% { opacity: .25; } 12%,54% { opacity: 1; } }
+
+/* shimmer button — błysk przesuwający się po przycisku */
+.btn--primary { position: relative; overflow: hidden; }
+.btn--primary > * { position: relative; z-index: 1; }
+.btn--primary::after {
+  content: ""; position: absolute; top: 0; left: -60%; width: 38%; height: 100%; pointer-events: none; z-index: 0;
+  background: linear-gradient(100deg, transparent, rgba(255,255,255,.55), transparent);
+  transform: skewX(-18deg); animation: shimmer 4.8s ease-in-out infinite;
+}
+@keyframes shimmer { 0% { left: -60%; } 24% { left: 130%; } 100% { left: 130%; } }
+
+/* border beam — obracająca się świetlna ramka na CTA końcowym */
+@property --beam { syntax: '<angle>'; inherits: false; initial-value: 0deg; }
+.endcta__inner::after {
+  content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 1.5px; pointer-events: none;
+  background: conic-gradient(from var(--beam), transparent 0%, var(--orange) 11%, #ffd0a8 17%, transparent 30%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude;
+  animation: beam 6s linear infinite;
+}
+@keyframes beam { to { --beam: 360deg; } }
+
 /* ---------- RESPONSIVE ---------- */
 @media (max-width: 940px) {
   .hero__inner { grid-template-columns: 1fr; gap: 50px; text-align: center; }
@@ -368,6 +444,7 @@ section { position: relative; }
   .hero__cta, .trust { justify-content: center; }
   .nav__links { display: none; }
   .steps, .feature-grid { grid-template-columns: 1fr 1fr; }
+  .feature-grid.bento { grid-template-columns: 1fr 1fr; }
   .proof__stats { grid-template-columns: repeat(2,1fr); }
   .proof__stats li:not(:last-child) { border-right: none; }
   .shots { display: flex; grid-template-columns: none; overflow-x: auto; padding-bottom: 18px; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; }
@@ -377,6 +454,8 @@ section { position: relative; }
   .container { padding: 0 18px; }
   .hero { padding: 110px 0 70px; }
   .compare, .steps, .feature-grid { grid-template-columns: 1fr; }
+  .feature-grid.bento { grid-template-columns: 1fr; }
+  .feature--wide { grid-column: auto; }
   .bridge, .how, .features, .gallery, .faq { padding: 70px 0; }
   .hero__cta .btn { width: 100%; }
   .footer__inner { flex-direction: column; text-align: center; }

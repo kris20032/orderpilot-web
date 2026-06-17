@@ -61,4 +61,57 @@
     }
   }
 
+  /* ---- 4. Scroll progress bar ---- */
+  var progress = document.getElementById('scrollProgress');
+  if (progress) {
+    var onProg = function () {
+      var h = document.documentElement;
+      var max = h.scrollHeight - h.clientHeight;
+      var p = max > 0 ? (window.scrollY || h.scrollTop) / max : 0;
+      progress.style.width = (Math.max(0, Math.min(1, p)) * 100).toFixed(2) + '%';
+    };
+    window.addEventListener('scroll', onProg, { passive: true });
+    window.addEventListener('resize', onProg, { passive: true });
+    onProg();
+  }
+
+  /* ---- 5. Spotlight follow on cards (tylko mysz, bez reduced-motion) ---- */
+  if (!reduce && window.matchMedia('(pointer: fine)').matches) {
+    var spotEls = document.querySelectorAll('.feature, .step, .compare__col');
+    spotEls.forEach(function (el) {
+      el.addEventListener('pointermove', function (e) {
+        var r = el.getBoundingClientRect();
+        el.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+        el.style.setProperty('--my', (e.clientY - r.top) + 'px');
+      });
+    });
+  }
+
+  /* ---- 6. Number ticker (count-up przy wejściu w kadr) ---- */
+  var counters = document.querySelectorAll('[data-count]');
+  function runCounter(el) {
+    var target = parseInt(el.getAttribute('data-count'), 10) || 0;
+    if (reduce) { el.textContent = target; return; }
+    var dur = 1300, start = null;
+    function tick(ts) {
+      if (start === null) start = ts;
+      var t = Math.min((ts - start) / dur, 1);
+      var eased = 1 - Math.pow(1 - t, 3);
+      el.textContent = Math.round(eased * target);
+      if (t < 1) requestAnimationFrame(tick);
+      else el.textContent = target;
+    }
+    requestAnimationFrame(tick);
+  }
+  if (counters.length && 'IntersectionObserver' in window) {
+    var co = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { runCounter(e.target); co.unobserve(e.target); }
+      });
+    }, { threshold: 0.6 });
+    counters.forEach(function (el) { co.observe(el); });
+  } else {
+    counters.forEach(runCounter);
+  }
+
 })();
