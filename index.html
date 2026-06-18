@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>OrderPilot — wiesz w sekundę, czy zlecenie się opłaca</title>
   <meta name="description" content="OrderPilot to asystent kuriera, który w czasie rzeczywistym pokazuje zł/h i kolor (zielony / żółty / czerwony) nad każdym zleceniem — Glovo, Wolt, Bolt Food, Uber Eats. Bez API i bez logowania do Twoich apek. Za darmo w Google Play." />
-  <meta name="theme-color" content="#0A1220" />
+  <meta name="theme-color" content="#0A0E16" />
   <link rel="icon" type="image/svg+xml" href="assets/logo.svg" />
   <link rel="canonical" href="https://kris20032.github.io/orderpilot-web/" />
 
@@ -20,18 +20,30 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
 
-  <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+  <!-- ikony (sprite, styl Lucide) -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <defs>
+      <symbol id="ic-zap" viewBox="0 0 24 24"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></symbol>
+      <symbol id="ic-compare" viewBox="0 0 24 24"><path d="M8 3 4 7l4 4"/><path d="M4 7h16"/><path d="m16 21 4-4-4-4"/><path d="M20 17H4"/></symbol>
+      <symbol id="ic-shield" viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></symbol>
+      <symbol id="ic-sliders" viewBox="0 0 24 24"><path d="M10 5H3"/><path d="M14 5h7"/><circle cx="12" cy="5" r="2"/><path d="M7 12H3"/><path d="M11 12h10"/><circle cx="9" cy="12" r="2"/><path d="M16 19h5"/><path d="M3 19h9"/><circle cx="14" cy="19" r="2"/></symbol>
+      <symbol id="ic-phone" viewBox="0 0 24 24"><rect width="14" height="20" x="5" y="2" rx="2"/><path d="M12 18h.01"/></symbol>
+      <symbol id="ic-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></symbol>
+      <symbol id="ic-tag" viewBox="0 0 24 24"><path d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"/><path d="M7.5 7.5h.01"/></symbol>
+      <symbol id="ic-chevron" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+    </defs>
+  </svg>
 
   <!-- ============ NAV ============ -->
   <header class="nav" id="nav">
     <div class="container nav__inner">
       <a class="brand" href="#top" aria-label="OrderPilot — początek strony">
-        <img class="brand__mark" src="assets/logo-mark.svg" alt="" width="28" height="28" />
+        <img class="brand__mark" src="assets/logo-mark.svg" alt="" width="26" height="26" />
         <span class="brand__name">OrderPilot</span>
       </a>
       <nav class="nav__links" aria-label="Główna nawigacja">
@@ -40,9 +52,7 @@
         <a href="#galeria">Zrzuty</a>
         <a href="#faq">FAQ</a>
       </nav>
-      <a class="btn btn--primary btn--sm" href="https://play.google.com/store/apps/details?id=com.orderpilot.app" target="_blank" rel="noopener">
-        <span class="btn__play" aria-hidden="true">▶</span> Pobierz
-      </a>
+      <a class="btn btn--primary btn--sm" href="https://play.google.com/store/apps/details?id=com.orderpilot.app" target="_blank" rel="noopener">Pobierz</a>
     </div>
   </header>
 
@@ -50,12 +60,11 @@
 
     <!-- ============ HERO ============ -->
     <section class="hero">
-      <div class="hero__glow" aria-hidden="true"></div>
-      <div class="hero__grid-bg" aria-hidden="true"></div>
+      <div class="hero__ambient" aria-hidden="true"></div>
       <div class="container hero__inner">
         <div class="hero__copy reveal">
           <p class="eyebrow"><span class="dot dot--live"></span> Asystent kuriera · LIVE w Google Play</p>
-          <h1 class="hero__title">Wiesz w sekundę,<br />czy zlecenie<br /><span class="grad">się opłaca.</span></h1>
+          <h1 class="hero__title">Wiesz w sekundę, czy zlecenie <span class="accent">się opłaca.</span></h1>
           <p class="hero__sub">
             OrderPilot wyświetla <strong>zł/h</strong> i kolor — <span class="hl hl--g">zielony</span>,
             <span class="hl hl--y">żółty</span> albo <span class="hl hl--r">czerwony</span> — nad każdym zleceniem
@@ -63,14 +72,15 @@
           </p>
           <div class="hero__cta">
             <a class="btn btn--primary btn--lg" href="https://play.google.com/store/apps/details?id=com.orderpilot.app" target="_blank" rel="noopener">
-              <span class="btn__play" aria-hidden="true">▶</span> Pobierz z Google Play
+              <svg class="btn__play" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3.5v17a.7.7 0 0 0 1.07.6l13.5-8.5a.7.7 0 0 0 0-1.2L6.07 2.9A.7.7 0 0 0 5 3.5z"/></svg>
+              Pobierz z Google Play
             </a>
             <a class="btn btn--ghost btn--lg" href="#jak">Zobacz, jak działa</a>
           </div>
           <ul class="trust">
-            <li><span class="trust__ic" aria-hidden="true">🌍</span> Dostępna w 177 krajach</li>
-            <li><span class="trust__ic" aria-hidden="true">🛡️</span> Bez logowania do Twoich apek</li>
-            <li><span class="trust__ic" aria-hidden="true">💸</span> Za darmo</li>
+            <li><svg class="ic" aria-hidden="true"><use href="#ic-globe" /></svg> Dostępna w 177 krajach</li>
+            <li><svg class="ic" aria-hidden="true"><use href="#ic-shield" /></svg> Bez logowania do Twoich apek</li>
+            <li><svg class="ic" aria-hidden="true"><use href="#ic-tag" /></svg> Za darmo</li>
           </ul>
         </div>
 
@@ -94,11 +104,11 @@
               <!-- Karta zlecenia -->
               <div class="order">
                 <div class="order__head">
-                  <span class="order__tag">🍽 Dostawa</span>
+                  <span class="order__tag">Dostawa</span>
                   <span class="order__verdict" id="orderVerdict">Opłaca się</span>
                 </div>
                 <div class="order__price" id="orderPrice">18,35 zł</div>
-                <div class="order__row" id="orderRow">⏱ 25 min · 6,3 km</div>
+                <div class="order__row" id="orderRow">25 min · 6,3 km</div>
                 <div class="order__addr">
                   <span class="order__dot"></span>
                   <div>
@@ -120,10 +130,10 @@
       <div class="container">
         <p class="platforms__label">Działa z aplikacjami, których już używasz</p>
         <ul class="platforms__list">
-          <li class="chip chip--glovo">Glovo</li>
-          <li class="chip chip--wolt">Wolt</li>
-          <li class="chip chip--bolt">Bolt Food</li>
-          <li class="chip chip--uber">Uber Eats</li>
+          <li class="chip">Glovo</li>
+          <li class="chip">Wolt</li>
+          <li class="chip">Bolt Food</li>
+          <li class="chip">Uber Eats</li>
         </ul>
       </div>
     </section>
@@ -132,7 +142,7 @@
     <section class="bridge">
       <div class="container bridge__inner">
         <div class="bridge__head reveal">
-          <h2>Bierzesz kurs w ciemno?<br /><span class="grad">Przestań zgadywać.</span></h2>
+          <h2>Bierzesz kurs w ciemno? <span class="accent">Przestań zgadywać.</span></h2>
           <p>Stawka za zlecenie nic nie mówi. Liczy się, ile zarobisz na <em>godzinę</em> —
             po doliczeniu czasu dojazdu i kilometrów. OrderPilot robi ten rachunek za Ciebie,
             zanim klikniesz „przyjmij".</p>
@@ -165,7 +175,7 @@
       <div class="container">
         <div class="section-head reveal">
           <p class="eyebrow">Jak to działa</p>
-          <h2>Trzy kroki. <span class="grad">Zero kombinowania.</span></h2>
+          <h2>Trzy kroki. <span class="accent">Zero kombinowania.</span></h2>
         </div>
         <ol class="steps">
           <li class="step reveal">
@@ -192,12 +202,14 @@
       <div class="container">
         <div class="section-head reveal">
           <p class="eyebrow">Funkcje</p>
-          <h2>Wszystko, by <span class="grad">w sekundę ocenić każde zlecenie.</span></h2>
+          <h2>Wszystko, by <span class="accent">w sekundę ocenić każde zlecenie.</span></h2>
         </div>
         <div class="feature-grid bento">
           <article class="feature feature--wide reveal">
-            <div class="feature__ic" aria-hidden="true">⚡</div>
-            <h3>zł/h w czasie rzeczywistym</h3>
+            <div class="feature__top">
+              <span class="feature__ic"><svg class="ic" aria-hidden="true"><use href="#ic-zap" /></svg></span>
+              <h3>zł/h w czasie rzeczywistym</h3>
+            </div>
             <p>Najważniejsza liczba kuriera, wyliczana z kwoty, czasu i dystansu — od razu, nad zleceniem.</p>
             <div class="feature__viz feature__viz--rate" aria-hidden="true">
               <span class="viz-pill viz-pill--g">44 zł/h</span>
@@ -206,8 +218,10 @@
             </div>
           </article>
           <article class="feature feature--wide reveal">
-            <div class="feature__ic feature__ic--lights" aria-hidden="true"><span></span><span></span><span></span></div>
-            <h3>Kolor: brać czy odpuścić</h3>
+            <div class="feature__top">
+              <span class="feature__ic feature__ic--lights"><span></span><span></span><span></span></span>
+              <h3>Kolor: brać czy odpuścić</h3>
+            </div>
             <p>Zielony, żółty, czerwony. Nie musisz nic czytać — kolor mówi wszystko jednym spojrzeniem.</p>
             <div class="feature__viz feature__viz--lights" aria-hidden="true">
               <span class="big-light big-light--g"></span>
@@ -216,22 +230,22 @@
             </div>
           </article>
           <article class="feature reveal">
-            <div class="feature__ic" aria-hidden="true">🔀</div>
+            <span class="feature__ic"><svg class="ic" aria-hidden="true"><use href="#ic-compare" /></svg></span>
             <h3>Porównanie ofert</h3>
             <p>Kilka platform jednocześnie na jednym ekranie. Od razu widzisz, gdzie zarobisz więcej.</p>
           </article>
           <article class="feature reveal">
-            <div class="feature__ic" aria-hidden="true">🛡️</div>
+            <span class="feature__ic"><svg class="ic" aria-hidden="true"><use href="#ic-shield" /></svg></span>
             <h3>Bezpieczne dla konta</h3>
             <p>Działa przez usługę dostępności Androida — bez API i bez logowania, nie ingeruje w aplikacje kurierskie.</p>
           </article>
           <article class="feature reveal">
-            <div class="feature__ic" aria-hidden="true">🎛️</div>
+            <span class="feature__ic"><svg class="ic" aria-hidden="true"><use href="#ic-sliders" /></svg></span>
             <h3>Ustawienia pod siebie</h3>
             <p>Wybierz, co pokazywać na belce (zł/h, zł/km, kwota, czas, dystans), ustaw przezroczystość i język.</p>
           </article>
           <article class="feature reveal">
-            <div class="feature__ic" aria-hidden="true">📱</div>
+            <span class="feature__ic"><svg class="ic" aria-hidden="true"><use href="#ic-phone" /></svg></span>
             <h3>Wszystkie platformy</h3>
             <p>Glovo, Wolt, Bolt Food, Uber Eats. Jedna apka do wszystkich aplikacji, w których jeździsz.</p>
           </article>
@@ -244,7 +258,7 @@
       <div class="container">
         <div class="section-head reveal">
           <p class="eyebrow">Zrzuty z aplikacji</p>
-          <h2>Prawdziwe zlecenia. <span class="grad">Prawdziwe wyniki.</span></h2>
+          <h2>Prawdziwe zlecenia. <span class="accent">Prawdziwe wyniki.</span></h2>
         </div>
         <div class="shots" role="group" aria-label="Zrzuty z aplikacji — przewiń w bok, aby zobaczyć więcej" tabindex="0">
           <figure class="shot reveal">
@@ -274,11 +288,11 @@
     <!-- ============ DOWÓD ============ -->
     <section class="proof reveal">
       <div class="container proof__inner">
-        <h2>Nie prototyp. <span class="grad">Działająca aplikacja.</span></h2>
+        <h2>Nie prototyp. <span class="accent">Działająca aplikacja.</span></h2>
         <p class="proof__sub">OrderPilot jest dostępny publicznie w Google Play i używany przez kurierów na realnych zleceniach.</p>
         <ul class="proof__stats">
           <li><span class="proof__big proof__big--live"><span class="dot dot--live"></span>LIVE</span><span class="proof__cap">w Google Play</span></li>
-          <li><span class="proof__big" data-count="177">177</span><span class="proof__cap">krajów</span></li>
+          <li><span class="proof__big">177</span><span class="proof__cap">krajów</span></li>
           <li><span class="proof__big">v1.0.5</span><span class="proof__cap">stabilna wersja</span></li>
           <li><span class="proof__big">0 zł</span><span class="proof__cap">za pobranie</span></li>
         </ul>
@@ -294,27 +308,27 @@
         </div>
         <div class="faq__list">
           <details class="qa reveal">
-            <summary>Czy korzystanie z OrderPilota jest bezpieczne dla konta?</summary>
+            <summary>Czy korzystanie z OrderPilota jest bezpieczne dla konta? <svg class="qa__chev" aria-hidden="true"><use href="#ic-chevron" /></svg></summary>
             <p>Tak. OrderPilot nie loguje się do aplikacji kurierskich i nie używa ich API — działa przez systemową usługę dostępności Androida, czyli czyta to, co i tak widzisz na ekranie. Nie ingeruje w aplikacje, więc nie naraża Twojego konta.</p>
           </details>
           <details class="qa reveal">
-            <summary>Czy OrderPilot podgląda albo wysyła moje dane?</summary>
+            <summary>Czy OrderPilot podgląda albo wysyła moje dane? <svg class="qa__chev" aria-hidden="true"><use href="#ic-chevron" /></svg></summary>
             <p>OrderPilot odczytuje treść zlecenia z ekranu tylko po to, żeby policzyć zł/h — i nic poza tym. Nie loguje się do Twoich aplikacji i nie korzysta z ich API.</p>
           </details>
           <details class="qa reveal">
-            <summary>Ile kosztuje?</summary>
+            <summary>Ile kosztuje? <svg class="qa__chev" aria-hidden="true"><use href="#ic-chevron" /></svg></summary>
             <p>Nic. Aplikacja jest darmowa do pobrania i używania.</p>
           </details>
           <details class="qa reveal">
-            <summary>Z jakimi aplikacjami działa?</summary>
+            <summary>Z jakimi aplikacjami działa? <svg class="qa__chev" aria-hidden="true"><use href="#ic-chevron" /></svg></summary>
             <p>Z Glovo, Wolt, Bolt Food i Uber Eats — czyli z najpopularniejszymi platformami dostaw w Polsce.</p>
           </details>
           <details class="qa reveal">
-            <summary>Skąd OrderPilot wie, ile zarobię?</summary>
+            <summary>Skąd OrderPilot wie, ile zarobię? <svg class="qa__chev" aria-hidden="true"><use href="#ic-chevron" /></svg></summary>
             <p>Z danych zlecenia: kwoty, szacowanego czasu i dystansu. Na tej podstawie wylicza zł/h oraz zł/km i pokazuje wynik kolorem na belce.</p>
           </details>
           <details class="qa reveal">
-            <summary>Jak włączyć?</summary>
+            <summary>Jak włączyć? <svg class="qa__chev" aria-hidden="true"><use href="#ic-chevron" /></svg></summary>
             <p>Po instalacji włączasz dwie zgody (wyświetlanie nad innymi aplikacjami oraz usługę dostępności) i klikasz „Start". Apka prowadzi krok po kroku.</p>
           </details>
         </div>
@@ -323,12 +337,12 @@
 
     <!-- ============ CTA KOŃCOWE ============ -->
     <section class="endcta">
-      <div class="endcta__glow" aria-hidden="true"></div>
       <div class="container endcta__inner reveal">
-        <h2>Zacznij liczyć, ile <span class="grad">naprawdę</span> zarabiasz.</h2>
+        <h2>Zacznij liczyć, ile <span class="accent">naprawdę</span> zarabiasz.</h2>
         <p>Pobierz OrderPilota i niech kolejne zlecenie samo Ci powie, czy warto.</p>
         <a class="btn btn--primary btn--lg" href="https://play.google.com/store/apps/details?id=com.orderpilot.app" target="_blank" rel="noopener">
-          <span class="btn__play" aria-hidden="true">▶</span> Pobierz z Google Play
+          <svg class="btn__play" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3.5v17a.7.7 0 0 0 1.07.6l13.5-8.5a.7.7 0 0 0 0-1.2L6.07 2.9A.7.7 0 0 0 5 3.5z"/></svg>
+          Pobierz z Google Play
         </a>
       </div>
     </section>
@@ -339,7 +353,7 @@
   <footer class="footer">
     <div class="container footer__inner">
       <div class="footer__brand">
-        <img src="assets/logo-mark.svg" alt="" width="24" height="24" />
+        <img src="assets/logo-mark.svg" alt="" width="22" height="22" />
         <span>OrderPilot</span>
       </div>
       <p class="footer__made">Stworzone przez <strong>BITA</strong></p>
