@@ -69,7 +69,7 @@ a { color: inherit; text-decoration: none; }
 /* ---------- TYPOGRAFIA ---------- */
 h1, h2, h3 { font-family: var(--display); font-weight: 700; line-height: 1.05; letter-spacing: -0.022em; text-wrap: balance; }
 .accent { color: var(--accent); }
-.data { font-family: var(--mono); color: var(--accent); font-weight: 600; font-size: .88em; letter-spacing: -.02em; }
+.data { font-family: var(--mono); color: var(--accent); font-weight: 600; font-size: .92em; letter-spacing: 0; vertical-align: -.012em; }
 .muted  { color: var(--muted); }
 
 .eyebrow {
