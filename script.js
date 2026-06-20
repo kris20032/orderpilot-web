@@ -99,6 +99,14 @@
       caps.forEach(function (c) { c.classList.add('is-active'); });
       tags.forEach(function (t) { t.classList.remove('is-active'); });
     });
+
+    // gdy karta wraca z tła — Chrome odracza wczytanie wideo w ukrytych kartach; dociągnij i odśwież scrub
+    document.addEventListener('visibilitychange', function () {
+      if (document.visibilityState === 'visible' && video.readyState < 1) {
+        try { video.load(); } catch (e) {}
+        if (window.ScrollTrigger) { ScrollTrigger.refresh(); }
+      }
+    });
   }
 
   /* ---- 4. Idle mouse-tilt telefonu (premium „żywy" — quickTo lerp, oddech) ---- */

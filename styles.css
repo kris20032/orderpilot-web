@@ -263,10 +263,14 @@ section { position: relative; }
 .film__tag[data-beat="3"] { bottom: 15%; left: -14px; }
 
 /* animowana strzałka (pojawia się przy „wpada zlecenie") */
-.film__arrow { position: absolute; width: 120px; height: 80px; right: 4px; top: 19%; z-index: 3; opacity: 0; transition: opacity .4s var(--ease); }
-.film__arrow path { stroke-dasharray: 220; stroke-dashoffset: 220; }
+.film__arrow { position: absolute; width: 140px; height: 96px; z-index: 6; opacity: 0; pointer-events: none;
+  top: 1%; left: 50%; transform: translateX(-2px); transition: opacity .45s var(--ease);
+  filter: drop-shadow(0 2px 4px hsl(18 80% 30% / .18)); }
+.film__arrow-line { stroke-dasharray: 100; stroke-dashoffset: 100; }
+.film__arrow-tip { opacity: 0; transition: opacity .25s ease .6s; }
 .film.is-pointing .film__arrow { opacity: 1; }
-.film.is-pointing .film__arrow path { transition: stroke-dashoffset .7s var(--ease-out); stroke-dashoffset: 0; }
+.film.is-pointing .film__arrow-line { transition: stroke-dashoffset .75s var(--ease-out); stroke-dashoffset: 0; }
+.film.is-pointing .film__arrow-tip { opacity: 1; }
 
 /* --- HERO: telefon-bohater (duży, wyśrodkowany, główna warstwa) --- */
 .hero.film { padding: 0; }
@@ -295,7 +299,9 @@ section { position: relative; }
 .film__tag--good, .film__tag--bad { bottom: auto; }
 .hero .film__tag[data-beat="0"] { top: 15%; left: -26px; right: auto; }
 .hero .film__tag[data-beat="1"] { top: 12%; right: -30px; left: auto; }
-.hero .film__tag[data-beat="2"] { top: 21%; right: -38px; left: auto; }
+.hero .film__tag[data-beat="2"] { top: 15%; right: -198px; left: auto; }
+/* connector celuje w belkę u góry telefonu; etykieta po prawej */
+.hero .film__arrow { width: 104px; height: 70px; top: 8%; left: calc(100% - 26px); right: auto; transform: none; }
 .hero .film__tag--good { top: auto; bottom: 27%; right: -22px; left: auto; }
 .hero .film__tag--bad  { top: auto; bottom: 12%; left: -20px; right: auto; }
 
