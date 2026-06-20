@@ -177,8 +177,13 @@ section { position: relative; }
 .platforms { padding: 30px 0 10px; }
 .platforms__label { text-align: center; color: var(--faint); font-size: .82rem; font-weight: 500; letter-spacing: .03em; margin-bottom: 20px; }
 .platforms__list { list-style: none; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
-.chip { padding: 9px 18px; border-radius: 999px; font-weight: 600; font-size: .94rem; background: var(--surface); border: 1px solid var(--line); color: var(--muted); transition: color .18s, border-color .18s; }
-.chip:hover { color: var(--text); border-color: var(--line-2); }
+.chip { display: inline-flex; align-items: center; gap: 9px; padding: 8px 17px 8px 9px; border-radius: 999px; font-weight: 700; font-size: .95rem; letter-spacing: -.01em; background: rgba(255,255,255,.05); border: 1px solid var(--line-2); color: var(--brand, var(--text)); transition: border-color .18s, background .18s, transform .18s var(--ease); }
+.chip__logo { width: 24px; height: 24px; border-radius: 7px; object-fit: cover; flex: none; }
+.chip:hover { transform: translateY(-2px); border-color: color-mix(in srgb, var(--brand) 55%, transparent); background: color-mix(in srgb, var(--brand) 12%, rgba(255,255,255,.05)); }
+.chip--glovo    { --brand: #FFC23D; }
+.chip--wolt     { --brand: #15C7E8; }
+.chip--bolt     { --brand: #34D186; }
+.chip--ubereats { --brand: #06C167; }
 
 /* ---------- BRIDGE ---------- */
 .bridge { padding: 124px 0; }
