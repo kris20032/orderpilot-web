@@ -28,23 +28,66 @@
     revealEls.forEach(function (el) { el.classList.add('in'); });
   }
 
-  /* ---- 3. Story scrollytelling (przyklejony telefon + kroki) ---- */
-  var story = document.querySelector('.story');
-  var steps = document.querySelectorAll('.story__step');
-  if (story && steps.length && 'IntersectionObserver' in window) {
-    story.classList.add('story--js'); // dopiero z JS przygaszamy nieaktywne kroki (bez JS = wszystkie widoczne)
-    var shots = document.querySelectorAll('.story__shot-img');
-    var callout = document.querySelector('.story__callout');
-    function activate(n) {
-      steps.forEach(function (s) { s.classList.toggle('is-active', s.dataset.step === n); });
-      shots.forEach(function (s) { s.classList.toggle('is-active', s.dataset.step === n); });
-      var active = document.querySelector('.story__step[data-step="' + n + '"]');
-      if (callout && active && active.dataset.callout) callout.textContent = active.dataset.callout;
+  /* ---- 3. FILM: wideo scrubowane scrollem + kinetyczne beaty (GSAP) ---- */
+  var film = document.querySelector('.film');
+  if (film && window.gsap && window.ScrollTrigger) {
+    gsap.registerPlugin(ScrollTrigger);
+    var video = film.querySelector('.film__video');
+    var caps  = Array.prototype.slice.call(film.querySelectorAll('.film__cap'));
+    var tags  = Array.prototype.slice.call(film.querySelectorAll('.film__tag'));
+    var dots  = Array.prototype.slice.call(film.querySelectorAll('.film__dots i'));
+    var BEATS = parseInt(film.getAttribute('data-beats'), 10) || 4;
+    var current = -1;
+
+    function setBeat(i) {
+      if (i === current) return; current = i;
+      caps.forEach(function (c, n) { c.classList.toggle('is-active', n === i); });
+      dots.forEach(function (d, n) { d.classList.toggle('is-active', n === i); });
+      tags.forEach(function (t) { t.classList.toggle('is-active', parseInt(t.dataset.beat, 10) === i); });
+      film.classList.toggle('is-pointing', i === 2); // strzałka przy „wpada zlecenie"
     }
-    var sio = new IntersectionObserver(function (entries) {
-      entries.forEach(function (e) { if (e.isIntersecting) activate(e.target.dataset.step); });
-    }, { rootMargin: '-45% 0px -45% 0px', threshold: 0 });
-    steps.forEach(function (s) { sio.observe(s); });
+
+    function whenReady(cb) {
+      if (video.readyState >= 1 && video.duration) { cb(); }
+      else { video.addEventListener('loadedmetadata', cb, { once: true }); }
+    }
+
+    var mm = gsap.matchMedia();
+
+    // DESKTOP — pin + scrub wideo + beaty
+    mm.add('(min-width: 901px) and (prefers-reduced-motion: no-preference)', function () {
+      video.removeAttribute('autoplay'); video.removeAttribute('loop');
+      video.preload = 'auto'; video.load();           // wymuś wczytanie (Chrome odracza offscreen)
+      try { video.pause(); } catch (e) {}
+      var st = ScrollTrigger.create({
+        trigger: film,
+        start: 'top top',
+        end: function () { return '+=' + (window.innerHeight * 4); },
+        pin: '.film__sticky',
+        scrub: 1,
+        anticipatePin: 1,
+        onUpdate: function (self) {
+          var p = self.progress, d = video.duration;
+          if (d && isFinite(d)) {
+            var t = p * (d - 0.05);
+            if (Math.abs(t - video.currentTime) > 0.005) { try { video.currentTime = t; } catch (e) {} }
+          }
+          setBeat(Math.max(0, Math.min(BEATS - 1, Math.floor(p * BEATS))));
+        }
+      });
+      setBeat(0);
+      video.addEventListener('loadedmetadata', function () { ScrollTrigger.refresh(); }, { once: true });
+      return function () { st.kill(); };
+    });
+
+    // MOBILE / reduced-motion — bez pinu: film gra autoplay-loop, wszystkie beaty widoczne (CSS)
+    mm.add('(max-width: 900px), (prefers-reduced-motion: reduce)', function () {
+      video.setAttribute('loop', ''); video.muted = true; video.setAttribute('playsinline', '');
+      var tryPlay = function () { var pr = video.play(); if (pr && pr.catch) pr.catch(function () {}); };
+      whenReady(tryPlay);
+      caps.forEach(function (c) { c.classList.add('is-active'); });
+      tags.forEach(function (t) { t.classList.remove('is-active'); });
+    });
   }
 
 })();
