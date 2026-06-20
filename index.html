@@ -55,54 +55,42 @@
     <section class="hero film" id="top" data-beats="4">
       <div class="hero__ambient" aria-hidden="true"></div>
       <div class="film__sticky">
-        <div class="container film__inner">
+        <div class="container film__center">
 
-          <div class="film__copy">
-            <p class="eyebrow"><span class="dot dot--live"></span> Asystent kuriera · LIVE</p>
-            <div class="film__caps">
-              <article class="film__cap is-active" data-beat="0">
-                <h1 class="hero__title">Wiesz w sekundę,<br>czy zlecenie <span class="accent">się opłaca.</span></h1>
-              </article>
-              <article class="film__cap" data-beat="1">
-                <span class="film__num">01</span>
-                <h2>Włączasz</h2>
-                <p>Jeden przycisk. Działa w tle nad&nbsp;Twoją apką.</p>
-              </article>
-              <article class="film__cap" data-beat="2">
-                <span class="film__num">02</span>
-                <h2>Wpada zlecenie</h2>
-                <p>W sekundę liczy <span class="data">zł/h</span>.</p>
-              </article>
-              <article class="film__cap" data-beat="3">
-                <span class="film__num">03</span>
-                <h2>Decydujesz</h2>
-                <p><span class="hl hl--g">Zielony</span> bierz, <span class="hl hl--r">czerwony</span> odpuść.</p>
-              </article>
-            </div>
-            <div class="hero__cta">
-              <a class="btn btn--primary btn--lg" href="https://play.google.com/store/apps/details?id=com.orderpilot.app" target="_blank" rel="noopener">
-                <svg class="btn__play" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3.5v17a.7.7 0 0 0 1.07.6l13.5-8.5a.7.7 0 0 0 0-1.2L6.07 2.9A.7.7 0 0 0 5 3.5z"/></svg>
-                Pobierz — za darmo
-              </a>
-            </div>
-            <div class="film__dots" aria-hidden="true"><i class="is-active"></i><i></i><i></i><i></i></div>
+          <p class="eyebrow"><span class="dot dot--live"></span> Asystent kuriera · LIVE</p>
+
+          <div class="film__caps">
+            <article class="film__cap is-active" data-beat="0">
+              <h1 class="hero__title">Wiesz w sekundę, czy zlecenie <span class="accent">się opłaca.</span></h1>
+            </article>
+            <article class="film__cap" data-beat="1"><h2>Włączasz. <span class="cap-sub">Działa w tle.</span></h2></article>
+            <article class="film__cap" data-beat="2"><h2>Wpada zlecenie. <span class="cap-sub">Liczy</span> <span class="data">zł/h</span><span class="cap-sub"> w sekundę.</span></h2></article>
+            <article class="film__cap" data-beat="3"><h2><span class="hl hl--g">Zielony</span> bierz, <span class="hl hl--r">czerwony</span> odpuść.</h2></article>
           </div>
 
           <div class="film__stage">
             <div class="device__glow" aria-hidden="true"></div>
-            <div class="phone phone--film">
+            <div class="phone phone--film" id="heroPhone">
               <video class="film__video" muted playsinline preload="auto" disablepictureinpicture
                      poster="assets/video/demo-poster.jpg">
                 <source src="assets/video/demo.mp4" type="video/mp4" />
               </video>
             </div>
-            <!-- pływające liquid-glass opisy + strzałka, zmieniają się z beatem scrolla -->
-            <div class="film__tag glass is-active" data-beat="0"><span class="film__tag-dot film__tag-dot--g"></span>Start — działa w tle</div>
-            <div class="film__tag glass" data-beat="1"><span class="film__tag-dot"></span>Online · czeka na zlecenie</div>
-            <div class="film__tag glass film__tag--big" data-beat="2"><span class="film__tag-k">34&nbsp;zł/h</span></div>
+            <!-- pływające liquid-glass opisy, zmieniają się z beatem scrolla -->
+            <div class="film__tag glass is-active" data-beat="0"><span class="film__tag-dot film__tag-dot--g"></span>Start</div>
+            <div class="film__tag glass" data-beat="1"><span class="film__tag-dot"></span>Czeka na zlecenie</div>
+            <div class="film__tag glass film__tag--big" data-beat="2"><span class="film__tag-k">34&nbsp;zł/h</span> · średnie</div>
             <div class="film__tag glass film__tag--good" data-beat="3"><span class="film__tag-dot film__tag-dot--g"></span>Bierz</div>
             <div class="film__tag glass film__tag--bad" data-beat="3"><span class="film__tag-dot film__tag-dot--r"></span>Odpuść</div>
           </div>
+
+          <div class="hero__cta">
+            <a class="btn btn--primary btn--lg" href="https://play.google.com/store/apps/details?id=com.orderpilot.app" target="_blank" rel="noopener">
+              <svg class="btn__play" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3.5v17a.7.7 0 0 0 1.07.6l13.5-8.5a.7.7 0 0 0 0-1.2L6.07 2.9A.7.7 0 0 0 5 3.5z"/></svg>
+              Pobierz — za darmo
+            </a>
+          </div>
+          <div class="film__dots" aria-hidden="true"><i class="is-active"></i><i></i><i></i><i></i></div>
 
         </div>
       </div>
