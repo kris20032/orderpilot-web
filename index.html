@@ -152,30 +152,51 @@
       </div>
     </section>
 
-    <!-- ============ JAK TO DZIAŁA ============ -->
-    <section class="how" id="jak">
+    <!-- ============ JAK TO DZIAŁA (scrollytelling) ============ -->
+    <section class="story" id="jak">
       <div class="container">
-        <div class="section-head section-head--left reveal">
+        <div class="story__head reveal">
           <p class="eyebrow">Jak to działa</p>
-          <h2>Trzy kroki do dobrej decyzji.</h2>
+          <h2>Od włączenia do decyzji — w trzech ruchach.</h2>
         </div>
-        <ol class="steps">
-          <li class="step reveal">
-            <span class="step__num">01</span>
-            <h3>Włącz nasłuch</h3>
-            <p>Jedno dotknięcie „Start". OrderPilot w tle nasłuchuje nowych zleceń w Twoich aplikacjach kurierskich.</p>
-          </li>
-          <li class="step reveal">
-            <span class="step__num">02</span>
-            <h3>Pojawia się zlecenie</h3>
-            <p>Gdy wpada oferta, OrderPilot od razu czyta kwotę, czas i dystans — bez żadnego API i bez logowania.</p>
-          </li>
-          <li class="step reveal">
-            <span class="step__num">03</span>
-            <h3>Widzisz kolor i zł/h</h3>
-            <p>Belka na górze ekranu pokazuje wynik i kolor. <span class="hl hl--g">Zielony</span> — bierzesz bez liczenia, <span class="hl hl--r">czerwony</span> — jedziesz dalej.</p>
-          </li>
-        </ol>
+        <div class="story__grid">
+          <ol class="story__steps">
+            <li class="story__step is-active" data-step="1" data-callout="Nasłuch aktywny">
+              <span class="story__num">01</span>
+              <h3>Włącz nasłuch</h3>
+              <p>Jedno dotknięcie „Start". OrderPilot w tle pilnuje nowych zleceń w Twoich aplikacjach kurierskich.</p>
+              <div class="story__shot--inline"><img src="assets/screens/main.png" alt="Ekran główny OrderPilot — status aktywny" loading="lazy" /></div>
+            </li>
+            <li class="story__step" data-step="2" data-callout="czyta: kwota · czas · km">
+              <span class="story__num">02</span>
+              <h3>Wpada zlecenie</h3>
+              <p>Gdy pojawia się oferta, OrderPilot od razu czyta kwotę, czas i dystans — bez API i bez logowania do Twoich apek.</p>
+              <div class="story__shot--inline"><img src="assets/screens/orange.png" alt="Belka OrderPilot nad nowym zleceniem" loading="lazy" /></div>
+            </li>
+            <li class="story__step" data-step="3" data-callout="44 zł/h · Bierz">
+              <span class="story__num">03</span>
+              <h3>Widzisz zł/h i kolor</h3>
+              <p>Belka na górze pokazuje wynik i kolor. <span class="hl hl--g">Zielony</span> — bierzesz bez liczenia, <span class="hl hl--r">czerwony</span> — jedziesz dalej.</p>
+              <div class="story__shot--inline"><img src="assets/screens/green.png" alt="Zielona belka OrderPilot: 44 zł/h" loading="lazy" /></div>
+            </li>
+            <li class="story__step" data-step="4" data-callout="Uber &gt; Bolt">
+              <span class="story__num">04</span>
+              <h3>Porównujesz platformy</h3>
+              <p>Kilka aplikacji naraz na jednym ekranie. Od razu widać, gdzie to samo zlecenie opłaca się bardziej.</p>
+              <div class="story__shot--inline"><img src="assets/screens/compare.png" alt="Porównanie dwóch platform: Uber zielony, Bolt czerwony" loading="lazy" /></div>
+            </li>
+          </ol>
+
+          <div class="story__stage" aria-hidden="true">
+            <div class="story__phone">
+              <img class="story__shot-img is-active" data-step="1" src="assets/screens/main.png" alt="" />
+              <img class="story__shot-img" data-step="2" src="assets/screens/orange.png" alt="" />
+              <img class="story__shot-img" data-step="3" src="assets/screens/green.png" alt="" />
+              <img class="story__shot-img" data-step="4" src="assets/screens/compare.png" alt="" />
+              <div class="story__callout glass">Nasłuch aktywny</div>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
