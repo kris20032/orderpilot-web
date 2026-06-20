@@ -46,13 +46,10 @@
         <img class="brand__mark" src="assets/logo-mark.svg" alt="" width="26" height="26" />
         <span class="brand__name">OrderPilot</span>
       </a>
-      <nav class="nav__links" aria-label="Główna nawigacja">
-        <a href="#jak">Jak to działa</a>
-        <a href="#funkcje">Funkcje</a>
-        <a href="#galeria">Zrzuty</a>
-        <a href="#faq">FAQ</a>
-      </nav>
-      <a class="btn btn--primary btn--sm" href="https://play.google.com/store/apps/details?id=com.orderpilot.app" target="_blank" rel="noopener">Pobierz</a>
+      <a class="btn btn--primary btn--sm" href="https://play.google.com/store/apps/details?id=com.orderpilot.app" target="_blank" rel="noopener">
+        <svg class="btn__play" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3.5v17a.7.7 0 0 0 1.07.6l13.5-8.5a.7.7 0 0 0 0-1.2L6.07 2.9A.7.7 0 0 0 5 3.5z"/></svg>
+        Pobierz
+      </a>
     </div>
   </header>
 
@@ -140,81 +137,60 @@
           <h2>Liczy się jedna liczba — <span class="data">zł/h</span>.</h2>
         </div>
         <div class="feature-grid bento">
-          <article class="feature feature--wide reveal">
+          <article class="feature feature--wide glass reveal">
             <div class="feature__top">
               <span class="feature__ic"><svg class="ic" aria-hidden="true"><use href="#ic-zap" /></svg></span>
               <h3>zł/h liczone za Ciebie</h3>
             </div>
-            <p>Najważniejsza liczba kuriera, wyliczana z kwoty, czasu i dystansu — zanim klikniesz „przyjmij".</p>
             <div class="feature__viz feature__viz--rate" aria-hidden="true">
               <span class="viz-pill viz-pill--g">44 zł/h</span>
               <span class="viz-pill">2,9 zł/km</span>
               <span class="viz-pill">18,35 zł</span>
             </div>
           </article>
-          <article class="feature feature--wide reveal">
+          <article class="feature feature--wide glass reveal">
             <div class="feature__top">
               <span class="feature__ic feature__ic--lights"><span></span><span></span><span></span></span>
               <h3>Kolor: brać czy odpuścić</h3>
             </div>
-            <p>Zielony, żółty, czerwony. Jeden rzut oka i wiesz, czy brać.</p>
             <div class="feature__viz feature__viz--lights" aria-hidden="true">
               <span class="big-light big-light--g"></span>
               <span class="big-light big-light--y"></span>
               <span class="big-light big-light--r"></span>
             </div>
           </article>
-          <article class="feature reveal">
+          <article class="feature feature--mini reveal">
             <span class="feature__ic"><svg class="ic" aria-hidden="true"><use href="#ic-compare" /></svg></span>
-            <h3>Porównanie ofert</h3>
-            <p>Kilka platform jednocześnie na jednym ekranie. Widzisz w jednym miejscu, gdzie zarobisz więcej.</p>
+            <h3>Porównanie platform</h3>
           </article>
-          <article class="feature reveal">
+          <article class="feature feature--mini reveal">
             <span class="feature__ic"><svg class="ic" aria-hidden="true"><use href="#ic-shield" /></svg></span>
-            <h3>Bezpieczne dla konta</h3>
-            <p>Działa przez usługę dostępności Androida — bez API i bez logowania, nie ingeruje w aplikacje kurierskie.</p>
+            <h3>Bezpieczne dla&nbsp;konta</h3>
           </article>
-          <article class="feature reveal">
+          <article class="feature feature--mini reveal">
             <span class="feature__ic"><svg class="ic" aria-hidden="true"><use href="#ic-sliders" /></svg></span>
-            <h3>Ustawienia pod siebie</h3>
-            <p>Wybierz, co pokazywać na belce (zł/h, zł/km, kwota, czas, dystans), ustaw przezroczystość i język.</p>
+            <h3>Ustawienia pod&nbsp;siebie</h3>
           </article>
-          <article class="feature reveal">
+          <article class="feature feature--mini reveal">
             <span class="feature__ic"><svg class="ic" aria-hidden="true"><use href="#ic-phone" /></svg></span>
             <h3>Wszystkie platformy</h3>
-            <p>Glovo, Wolt, Bolt Food, Uber Eats. Jedna apka do wszystkich aplikacji, w których jeździsz.</p>
           </article>
         </div>
       </div>
     </section>
 
-    <!-- ============ GALERIA ============ -->
+    <!-- ============ GALERIA (czyste karty-zdjęcia) ============ -->
     <section class="gallery" id="galeria">
       <div class="container">
         <div class="section-head reveal">
-          <h2>Tak to wygląda na żywym zleceniu.</h2>
+          <h2>Na żywym zleceniu.</h2>
         </div>
-        <div class="shots" role="group" aria-label="Zrzuty z aplikacji — przewiń w bok, aby zobaczyć więcej" tabindex="0">
-          <figure class="shot reveal">
-            <div class="shot__phone"><img src="assets/screens/compare.png" alt="OrderPilot porównuje dwie platformy naraz — Uber na zielono, Bolt na czerwono" loading="lazy" /></div>
-            <figcaption>Porównanie platform — od razu widać, gdzie się opłaca</figcaption>
-          </figure>
-          <figure class="shot reveal">
-            <div class="shot__phone"><img src="assets/screens/green.png" alt="Zielona belka OrderPilot nad zleceniem Wolt: 44 zł/h" loading="lazy" /></div>
-            <figcaption>Zielona belka = bierz. Pełne detale zlecenia</figcaption>
-          </figure>
-          <figure class="shot reveal">
-            <div class="shot__phone"><img src="assets/screens/orange.png" alt="Pomarańczowa belka OrderPilot nad zleceniem" loading="lazy" /></div>
-            <figcaption>Wynik na żywo, nałożony na aplikację kurierską</figcaption>
-          </figure>
-          <figure class="shot reveal">
-            <div class="shot__phone"><img src="assets/screens/settings.png" alt="Ekran ustawień OrderPilot — co wyświetlać na belce" loading="lazy" /></div>
-            <figcaption>Ustaw belkę pod siebie</figcaption>
-          </figure>
-          <figure class="shot reveal">
-            <div class="shot__phone"><img src="assets/screens/main.png" alt="Ekran główny OrderPilot — status Active, monitorowanie" loading="lazy" /></div>
-            <figcaption>Jeden przycisk: Start / Stop</figcaption>
-          </figure>
+        <div class="shots">
+          <figure class="shot reveal"><img src="assets/screens/main.png" alt="OrderPilot — ekran główny, jeden przycisk Start" loading="lazy" /></figure>
+          <figure class="shot reveal"><img src="assets/screens/orange.png" alt="OrderPilot — belka z wynikiem nad zleceniem" loading="lazy" /></figure>
+          <figure class="shot reveal"><img src="assets/screens/green.png" alt="OrderPilot — zielona belka, 44 zł/h" loading="lazy" /></figure>
+          <figure class="shot reveal"><img src="assets/screens/compare.png" alt="OrderPilot — porównanie dwóch platform" loading="lazy" /></figure>
+          <figure class="shot reveal"><img src="assets/screens/settings.png" alt="OrderPilot — ustawienia belki" loading="lazy" /></figure>
         </div>
       </div>
     </section>
@@ -296,6 +272,7 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1/dist/lenis.min.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
