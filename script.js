@@ -79,8 +79,11 @@
           if (d && isFinite(d)) {
             var t = p * (d - 0.05);
             if (Math.abs(t - video.currentTime) > 0.005) { try { video.currentTime = t; } catch (e) {} }
+            // beaty zsynchronizowane z momentami filmu: Start <2s · czeka <6.8s · wpada zlecenie <10.5s · decyzja
+            setBeat(t < 2 ? 0 : t < 6.8 ? 1 : t < 10.5 ? 2 : 3);
+          } else {
+            setBeat(Math.max(0, Math.min(BEATS - 1, Math.floor(p * BEATS))));
           }
-          setBeat(Math.max(0, Math.min(BEATS - 1, Math.floor(p * BEATS))));
         }
       });
       setBeat(0);
@@ -96,6 +99,31 @@
       caps.forEach(function (c) { c.classList.add('is-active'); });
       tags.forEach(function (t) { t.classList.remove('is-active'); });
     });
+  }
+
+  /* ---- 4. Idle mouse-tilt telefonu (premium „żywy" — quickTo lerp, oddech) ---- */
+  var heroPhone = document.getElementById('heroPhone');
+  var heroStage = heroPhone && heroPhone.closest('.film__stage');
+  var heroSec = document.querySelector('.hero');
+  var touch = window.matchMedia('(hover: none), (pointer: coarse)').matches;
+  if (heroPhone && heroStage && heroSec && window.gsap && !reduce && !touch) {
+    gsap.to(heroPhone, { y: 7, duration: 5, ease: 'sine.inOut', yoyo: true, repeat: -1 });
+    var TD = 0.6, TE = 'power3';
+    var rotX = gsap.quickTo(heroPhone, 'rotationX', { duration: TD, ease: TE });
+    var rotY = gsap.quickTo(heroPhone, 'rotationY', { duration: TD, ease: TE });
+    var srect = null;
+    var refreshRect = function () { srect = heroStage.getBoundingClientRect(); };
+    refreshRect();
+    window.addEventListener('resize', refreshRect, { passive: true });
+    window.addEventListener('scroll', refreshRect, { passive: true });
+    heroSec.addEventListener('mousemove', function (e) {
+      if (!srect) refreshRect();
+      var px = (e.clientX - srect.left) / srect.width - 0.5;
+      var py = (e.clientY - srect.top) / srect.height - 0.5;
+      px = Math.max(-1.3, Math.min(1.3, px)); py = Math.max(-1.3, Math.min(1.3, py));
+      rotY(px * 6); rotX(-py * 6);
+    }, { passive: true });
+    heroSec.addEventListener('mouseleave', function () { rotX(0); rotY(0); });
   }
 
 })();
