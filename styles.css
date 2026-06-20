@@ -343,13 +343,16 @@ section { position: relative; }
 
 /* ---------- GALLERY (czyste karty-zdjęcia, jak hero231) ---------- */
 .gallery { padding: 110px 0; }
-.shots { display: grid; grid-template-columns: repeat(5,1fr); gap: 18px; align-items: start; }
-.shot { margin: 0; border-radius: 26px; overflow: hidden; border: 1px solid var(--line); background: #fff;
-  box-shadow: 0 30px 56px -34px rgba(26,23,20,.28); transition: transform .32s var(--ease-out), border-color .25s, box-shadow .32s; }
+.shots { display: flex; justify-content: center; align-items: center; gap: clamp(10px, 1.5vw, 22px); }
+.shot { margin: 0; flex: 0 0 auto; border-radius: 28px; overflow: hidden; border: 1px solid var(--line); background: #fff;
+  box-shadow: 0 30px 56px -34px rgba(26,23,20,.26); transition: transform .35s var(--ease-out), border-color .25s, box-shadow .35s; }
 .shot img { display: block; width: 100%; height: auto; }
-.shot:hover { transform: translateY(-8px); border-color: var(--line-2); box-shadow: 0 44px 80px -34px rgba(26,23,20,.34); }
-.shots .shot:nth-child(even) { margin-top: 44px; }
-.shots .shot:nth-child(3) { margin-top: 20px; }
+.shot:hover { transform: translateY(-10px); border-color: var(--line-2); box-shadow: 0 50px 86px -34px rgba(26,23,20,.34); }
+/* hero231: środkowa karta największa, boczne maleją na zewnątrz → łuk wokół „świetnego zlecenia" */
+.shots .shot:nth-child(1), .shots .shot:nth-child(5) { width: 15%; opacity: .94; }
+.shots .shot:nth-child(2), .shots .shot:nth-child(4) { width: 18%; }
+.shots .shot:nth-child(3) { width: 21.5%; z-index: 2; border-color: var(--line-2);
+  box-shadow: 0 52px 92px -36px rgba(26,23,20,.40); }
 
 /* ---------- PROOF ---------- */
 .proof { padding: 80px 0; }
@@ -427,8 +430,9 @@ section { position: relative; }
   .proof__stats { grid-template-columns: repeat(2,1fr); gap: 20px 0; }
   .proof__stats li:nth-child(2n) { border-right: none; }
   .proof__stats li:nth-child(-n+2) { padding-bottom: 24px; border-bottom: 1px solid var(--line); }
-  .shots { display: flex; overflow-x: auto; padding-bottom: 18px; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; }
-  .shot { flex: 0 0 66%; max-width: 260px; scroll-snap-align: center; }
+  .shots { display: flex; overflow-x: auto; align-items: stretch; gap: 14px; padding-bottom: 18px; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; }
+  .shots .shot, .shots .shot:nth-child(1), .shots .shot:nth-child(2), .shots .shot:nth-child(3), .shots .shot:nth-child(4), .shots .shot:nth-child(5) {
+    flex: 0 0 66%; width: auto; max-width: 260px; opacity: 1; scroll-snap-align: center; }
   /* film: na mobile bez pinu/scrubu — film gra autoplay-loop, tekst nad nim stosem */
   .film__sticky { min-height: 0; padding: 64px 0; }
   .film__inner { grid-template-columns: 1fr; gap: 30px; text-align: center; }
