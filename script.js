@@ -81,9 +81,28 @@
     var focusScrim = focusEl && focusEl.querySelector('.film__focus-scrim');
     var focusHalo  = focusEl && focusEl.querySelector('.film__focus-halo');
     var focusShown = false;
-    // zmierzone z demo.mp4: belka stawki = top 6.5%, wysokość 10.5%, pełna szerokość
-    var RATE = { left: 0.0, top: 0.065, width: 1.0, height: 0.105 };
+    // zmierzone z demo.mp4: belka = pełna szerokość, wysokość 10.5%; TOP zmienny (belkę da się przeciągać)
+    var RATE = { left: 0.0, width: 1.0, height: 0.105 };
     var PADX = 1.4, PADY = 1.6;  // % oddech halo wokół belki
+    // trajektoria TOP belki w czasie filmu (zmierzona): u góry → przeciągnięta w dół ~16% → wraca
+    var TRACK = [[0, 0.065], [9.2, 0.065], [9.4, 0.077], [9.6, 0.106], [9.8, 0.133],
+                 [10.0, 0.159], [10.4, 0.160], [10.6, 0.123], [11.0, 0.083], [20, 0.083]];
+    function belkaTopAt(t) {
+      if (t <= TRACK[0][0]) return TRACK[0][1];
+      for (var i = 1; i < TRACK.length; i++) {
+        if (t <= TRACK[i][0]) {
+          var a = TRACK[i - 1], b = TRACK[i];
+          return a[1] + (b[1] - a[1]) * (t - a[0]) / (b[0] - a[0]);
+        }
+      }
+      return TRACK[TRACK.length - 1][1];
+    }
+    // ustaw pionową pozycję halo + jasnej strefy (śledzi przeciąganą belkę)
+    function setBelkaTop(top) {
+      if (!focusHalo || !focusScrim) return;
+      focusHalo.style.setProperty('--bt', (top * 100 - PADY) + '%');
+      focusScrim.style.setProperty('--hcy', ((top + RATE.height / 2) * 100) + '%');
+    }
 
     // nałóż reflektor DOKŁADNIE na wideo przez OFFSETY (niezależne od przechyłu telefonu); halo/scrim w % wideo
     function placeFocus() {
@@ -95,10 +114,9 @@
       focusEl.style.width = w + 'px';
       focusEl.style.height = h + 'px';
       focusHalo.style.setProperty('--bl', (RATE.left * 100 - PADX) + '%');
-      focusHalo.style.setProperty('--bt', (RATE.top * 100 - PADY) + '%');
       focusHalo.style.setProperty('--bw', (RATE.width * 100 + PADX * 2) + '%');
       focusHalo.style.setProperty('--bh', (RATE.height * 100 + PADY * 2) + '%');
-      focusScrim.style.setProperty('--hcy', ((RATE.top + RATE.height / 2) * 100) + '%');  // środek jasnej strefy = środek belki
+      setBelkaTop(0.065);                                   // start: belka u góry
     }
 
     // pokaż / ukryj reflektor (wołane z setBeat: on = beat 2)
@@ -150,6 +168,7 @@
             if (Math.abs(t - video.currentTime) > 0.005) { try { video.currentTime = t; } catch (e) {} }
             // beaty zsynchronizowane z momentami filmu: Start <2s · czeka <6.8s · wpada zlecenie <10.5s · decyzja
             setBeat(t < 2 ? 0 : t < 6.8 ? 1 : t < 10.5 ? 2 : 3);
+            if (focusShown) setBelkaTop(belkaTopAt(t));     // halo + jasna strefa jadą za przeciąganą belką
           } else {
             setBeat(Math.max(0, Math.min(BEATS - 1, Math.floor(p * BEATS))));
           }
