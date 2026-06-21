@@ -164,4 +164,87 @@
     }
   }
 
+  /* ---- 6. Galeria coverflow — żywy karuzel (klik/hover centrują, autoplay, kropki, swipe) ---- */
+  var gallery = document.querySelector('.shots');
+  if (gallery) {
+    var cards = Array.prototype.slice.call(gallery.querySelectorAll('.shot'));
+    var N = cards.length;
+    if (N) {
+      var dotsWrap = document.querySelector('.shots__dots');
+      var dots = null;
+      var active = cards.findIndex(function (c) { return c.getAttribute('data-pos') === '0'; });
+      if (active < 0) active = Math.floor(N / 2);
+      var desktopMQ = window.matchMedia('(min-width: 901px)');
+      var auto = null, AUTO_MS = 3800;
+
+      function layout() {
+        for (var i = 0; i < N; i++) {
+          var rel = ((i - active) % N + N) % N;          // 0..N-1
+          var pos = rel > N / 2 ? rel - N : rel;          // N=5 → -2..2
+          cards[i].setAttribute('data-pos', (pos < -2 || pos > 2) ? 'hide' : String(pos));
+          cards[i].setAttribute('aria-hidden', pos === 0 ? 'false' : 'true');
+        }
+        if (dots) dots.forEach(function (d, n) { d.classList.toggle('is-active', n === active); });
+      }
+      function go(i) { active = ((i % N) + N) % N; layout(); }
+      function next() { go(active + 1); }
+      function prev() { go(active - 1); }
+      function startAuto() { if (reduce || !desktopMQ.matches || auto) return; auto = setInterval(next, AUTO_MS); }
+      function stopAuto() { if (auto) { clearInterval(auto); auto = null; } }
+      function restartAuto() { stopAuto(); startAuto(); }
+
+      // kropki nawigacji
+      if (dotsWrap) {
+        dots = cards.map(function (_, i) {
+          var b = document.createElement('button');
+          b.type = 'button';
+          b.setAttribute('aria-label', 'Pokaż zrzut ' + (i + 1));
+          b.addEventListener('click', function () { go(i); restartAuto(); });
+          dotsWrap.appendChild(b);
+          return b;
+        });
+      }
+
+      // klik centruje; hover centruje (tylko desktop — żeby na dotyku nie skakało)
+      cards.forEach(function (c, i) {
+        c.addEventListener('click', function () { go(i); restartAuto(); });
+        c.addEventListener('mouseenter', function () { if (desktopMQ.matches) go(i); });
+      });
+
+      // autoplay pauzuje na hover całej galerii
+      gallery.addEventListener('mouseenter', stopAuto);
+      gallery.addEventListener('mouseleave', startAuto);
+
+      // klawiatura
+      gallery.setAttribute('tabindex', '0');
+      gallery.setAttribute('aria-label', 'Galeria zrzutów — strzałki zmieniają widok');
+      gallery.addEventListener('keydown', function (e) {
+        if (e.key === 'ArrowRight') { next(); restartAuto(); e.preventDefault(); }
+        else if (e.key === 'ArrowLeft') { prev(); restartAuto(); e.preventDefault(); }
+      });
+
+      // swipe / drag
+      var sx = null;
+      gallery.addEventListener('pointerdown', function (e) { sx = e.clientX; });
+      window.addEventListener('pointerup', function (e) {
+        if (sx === null) return;
+        var dx = e.clientX - sx; sx = null;
+        if (Math.abs(dx) > 40) { if (dx < 0) next(); else prev(); restartAuto(); }
+      });
+
+      if (desktopMQ.addEventListener) {
+        desktopMQ.addEventListener('change', function () { if (desktopMQ.matches) { layout(); startAuto(); } else stopAuto(); });
+      }
+
+      layout();
+      // autoplay rusza dopiero gdy galeria jest w widoku
+      if ('IntersectionObserver' in window) {
+        var iog = new IntersectionObserver(function (entries) {
+          entries.forEach(function (en) { if (en.isIntersecting) startAuto(); else stopAuto(); });
+        }, { threshold: 0.35 });
+        iog.observe(gallery);
+      } else { startAuto(); }
+    }
+  }
+
 })();

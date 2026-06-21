@@ -356,30 +356,38 @@ section { position: relative; }
 
 /* ---------- GALLERY (czyste karty-zdjęcia, jak hero231) ---------- */
 .gallery { padding: 110px 0; }
-/* coverflow (jak shadcnblocks hero231): karty 3D nakładające się, środek z przodu */
-.shots { display: flex; justify-content: center; align-items: center; perspective: 1800px; padding: 24px 0 34px; }
-.shot { flex: 0 0 auto; border-radius: 26px; overflow: hidden; border: 1px solid var(--line); background: #fff;
-  box-shadow: 0 30px 60px -34px rgba(26,23,20,.30); transform-style: preserve-3d;
-  transition: transform .55s var(--ease-out), box-shadow .4s var(--ease); }
-.shot img { display: block; width: 100%; height: auto; }
-/* środek: największy, prosty, na wierzchu */
-.shots .shot:nth-child(3) { width: 22%; z-index: 5; box-shadow: 0 54px 96px -34px rgba(26,23,20,.44); }
-/* pierwszy pierścień: lekko obrócone, schowane za środkiem */
-.shots .shot:nth-child(2) { width: 19.5%; z-index: 4; transform: rotateY(32deg) scale(.92); margin-right: -3.4%; }
-.shots .shot:nth-child(4) { width: 19.5%; z-index: 4; transform: rotateY(-32deg) scale(.92); margin-left: -3.4%; }
-/* zewnętrzny pierścień: mocniej obrócone, głębiej */
-.shots .shot:nth-child(1) { width: 18.5%; z-index: 3; transform: rotateY(40deg) scale(.78); margin-right: -4.6%; }
-.shots .shot:nth-child(5) { width: 18.5%; z-index: 3; transform: rotateY(-40deg) scale(.78); margin-left: -4.6%; }
+/* coverflow-karuzel (jak shadcnblocks hero231): sterowany indeksem, karty 3D, płynne slajdy */
+.shots { position: relative; height: clamp(420px, 56vh, 580px); perspective: 1900px; margin-top: 6px; outline: none; }
+.shot { position: absolute; left: 50%; top: 50%; height: 86%; width: auto;
+  border-radius: 26px; overflow: hidden; border: 1px solid var(--line); background: #fff;
+  box-shadow: 0 30px 60px -34px rgba(26,23,20,.30); transform-style: preserve-3d; cursor: pointer;
+  transform: translate(-50%,-50%);
+  transition: transform .6s var(--ease-out), opacity .5s var(--ease), box-shadow .4s var(--ease);
+  will-change: transform; }
+.shot img { display: block; height: 100%; width: auto; }
+/* sloty coverflow — wyższa specyficzność (.shots .shot[...]) niż .reveal.in, by transform nie zniknął */
+.shots .shot[data-pos="0"]  { transform: translate(-50%,-50%) rotateY(0deg) scale(1); z-index: 5;
+  box-shadow: 0 54px 96px -34px rgba(26,23,20,.44); }
+.shots .shot[data-pos="1"]  { transform: translate(-50%,-50%) translateX(72%)  rotateY(-30deg) scale(.86); z-index: 4; }
+.shots .shot[data-pos="-1"] { transform: translate(-50%,-50%) translateX(-72%) rotateY(30deg)  scale(.86); z-index: 4; }
+.shots .shot[data-pos="2"]  { transform: translate(-50%,-50%) translateX(132%)  rotateY(-38deg) scale(.72); z-index: 3; }
+.shots .shot[data-pos="-2"] { transform: translate(-50%,-50%) translateX(-132%) rotateY(38deg)  scale(.72); z-index: 3; }
+.shots .shot[data-pos="hide"] { opacity: 0; pointer-events: none; z-index: 1;
+  transform: translate(-50%,-50%) scale(.6); }
 .shot:hover { box-shadow: 0 64px 110px -34px rgba(26,23,20,.42); }
-/* podpis na środkowej karcie — konkret + mikrointerakcja hover ~300ms */
-.shot { position: relative; }
+/* podpis na środkowej karcie — konkret + mikrointerakcja hover */
 .shot figcaption { position: absolute; left: 12px; bottom: 12px; z-index: 3;
   font: 600 .78rem/1 var(--mono); color: #fff; background: rgba(26,23,20,.72);
   -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
   padding: 7px 11px; border-radius: 10px; white-space: nowrap;
-  opacity: 0; transform: translateY(6px);
-  transition: opacity .3s var(--ease-out), transform .3s var(--ease-out); }
-.shot--hero:hover figcaption, .shot--hero:focus-within figcaption { opacity: 1; transform: none; }
+  opacity: 0; transform: translateY(6px); transition: opacity .3s var(--ease-out), transform .3s var(--ease-out); }
+.shots .shot--hero[data-pos="0"]:hover figcaption { opacity: 1; transform: none; }
+/* kropki nawigacji */
+.shots__dots { display: flex; justify-content: center; gap: 9px; margin-top: 28px; }
+.shots__dots button { width: 9px; height: 9px; padding: 0; border: none; border-radius: 50%;
+  background: var(--line-2); cursor: pointer; transition: background .3s var(--ease), width .3s var(--ease), transform .2s var(--ease); }
+.shots__dots button:hover { transform: scale(1.25); }
+.shots__dots button.is-active { background: var(--accent); width: 26px; border-radius: 5px; }
 
 /* ---------- PROOF ---------- */
 .proof { padding: 80px 0; }
@@ -431,10 +439,6 @@ section { position: relative; }
 .feature-grid .feature:nth-child(6){ transition-delay: .19s; }
 .steps .step:nth-child(2){ transition-delay: .08s; }
 .steps .step:nth-child(3){ transition-delay: .16s; }
-.shots .shot:nth-child(2){ transition-delay: .06s; }
-.shots .shot:nth-child(3){ transition-delay: .12s; }
-.shots .shot:nth-child(4){ transition-delay: .18s; }
-.shots .shot:nth-child(5){ transition-delay: .24s; }
 /* hero: osobne, „ręczne" wejście ze staggerem (inny ruch niż reszta) */
 .hero__copy > * { animation: rise .7s var(--ease-out) both; }
 .hero__copy > :nth-child(2){ animation-delay: .08s; }
@@ -457,9 +461,12 @@ section { position: relative; }
   .proof__stats { grid-template-columns: repeat(2,1fr); gap: 20px 0; }
   .proof__stats li:nth-child(2n) { border-right: none; }
   .proof__stats li:nth-child(-n+2) { padding-bottom: 24px; border-bottom: 1px solid var(--line); }
-  .shots { display: flex; overflow-x: auto; align-items: stretch; gap: 14px; padding: 0 0 18px; perspective: none; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; }
-  .shots .shot, .shots .shot:nth-child(1), .shots .shot:nth-child(2), .shots .shot:nth-child(3), .shots .shot:nth-child(4), .shots .shot:nth-child(5) {
-    flex: 0 0 66%; width: auto; max-width: 260px; opacity: 1; transform: none; margin: 0; scroll-snap-align: center; }
+  .shots { position: static; height: auto; display: flex; overflow-x: auto; align-items: stretch; gap: 14px; padding: 0 0 18px; perspective: none; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; }
+  .shots .shot, .shots .shot[data-pos] {
+    position: relative; left: auto; top: auto; height: auto; flex: 0 0 66%; width: auto; max-width: 260px;
+    opacity: 1; transform: none; margin: 0; scroll-snap-align: center; }
+  .shots .shot img { width: 100%; height: auto; }
+  .shots__dots { display: none; }
   /* film: na mobile bez pinu/scrubu — film gra autoplay-loop, tekst nad nim stosem */
   .film__sticky { min-height: 0; padding: 64px 0; }
   .film__inner { grid-template-columns: 1fr; gap: 30px; text-align: center; }
