@@ -118,14 +118,8 @@
             <div class="film__tag glass film__tag--big" data-beat="2"><span class="film__tag-k">34&nbsp;zł/h</span> · średnie</div>
             <div class="film__tag glass film__tag--good" data-beat="3"><span class="film__tag-dot film__tag-dot--g"></span>Bierz</div>
             <div class="film__tag glass film__tag--bad" data-beat="3"><span class="film__tag-dot film__tag-dot--r"></span>Odpuść</div>
-            <!-- niewidoczne kotwice celu na ekranie telefonu (procentowo → jadą z telefonem) -->
-            <i class="hot" data-beat="1" style="left:52%;top:22%"></i>
-            <i class="hot" data-beat="2" style="left:46%;top:13%"></i>
-            <!-- overlay: prowadnica rysuje się + kropka-cel; geometria liczona w JS per beat -->
-            <svg class="film__overlay" aria-hidden="true" fill="none" preserveAspectRatio="none">
-              <path class="film__lead" stroke="var(--accent)" stroke-width="1.6" stroke-linecap="round" fill="none"/>
-              <circle class="film__dot" r="4.5" fill="var(--accent)"/>
-            </svg>
+            <!-- świecąca ramka (spotlight) na elemencie ekranu — pozycja per beat (CSS %) -->
+            <div class="film__spot" aria-hidden="true"></div>
           </div>
 
           <div class="hero__cta">
