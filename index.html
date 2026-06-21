@@ -15,15 +15,55 @@
   <meta property="og:description" content="Asystent kuriera: zł/h i kolor nad każdym zleceniem. Glovo, Wolt, Bolt Food, Uber Eats. Bez API i logowania. Za darmo." />
   <meta property="og:url" content="https://kris20032.github.io/orderpilot-web/" />
   <meta property="og:locale" content="pl_PL" />
+  <meta property="og:site_name" content="OrderPilot" />
   <meta property="og:image" content="https://kris20032.github.io/orderpilot-web/assets/screens/compare.png" />
+  <meta property="og:image:alt" content="OrderPilot — zł/h i kolor nad każdym zleceniem" />
   <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="OrderPilot — wiesz w sekundę, czy zlecenie się opłaca" />
+  <meta name="twitter:description" content="Asystent kuriera: zł/h i kolor nad każdym zleceniem. Glovo, Wolt, Bolt Food, Uber Eats. Bez API i logowania. Za darmo." />
+  <meta name="twitter:image" content="https://kris20032.github.io/orderpilot-web/assets/screens/compare.png" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
+
+  <!-- Structured data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "MobileApplication",
+    "name": "OrderPilot",
+    "operatingSystem": "Android",
+    "applicationCategory": "BusinessApplication",
+    "softwareVersion": "1.0.5",
+    "description": "Asystent kuriera, który pokazuje zł/h i kolor (zielony/żółty/czerwony) nad każdym zleceniem w Glovo, Wolt, Bolt Food i Uber Eats.",
+    "url": "https://kris20032.github.io/orderpilot-web/",
+    "downloadUrl": "https://play.google.com/store/apps/details?id=com.orderpilot.app",
+    "installUrl": "https://play.google.com/store/apps/details?id=com.orderpilot.app",
+    "author": { "@type": "Person", "name": "Krzysztof Brzeziński" },
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "PLN" }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "Czy korzystanie z OrderPilota jest bezpieczne dla konta?", "acceptedAnswer": { "@type": "Answer", "text": "Tak. OrderPilot nie loguje się do aplikacji kurierskich i nie używa ich API — działa przez systemową usługę dostępności Androida, czyli czyta to, co i tak widzisz na ekranie. Nie ingeruje w aplikacje, więc nie naraża Twojego konta." } },
+      { "@type": "Question", "name": "Czy OrderPilot podgląda albo wysyła moje dane?", "acceptedAnswer": { "@type": "Answer", "text": "OrderPilot odczytuje treść zlecenia z ekranu tylko po to, żeby policzyć zł/h — i nic poza tym. Nie loguje się do Twoich aplikacji i nie korzysta z ich API." } },
+      { "@type": "Question", "name": "Ile kosztuje?", "acceptedAnswer": { "@type": "Answer", "text": "Nic. Aplikacja jest darmowa do pobrania i używania." } },
+      { "@type": "Question", "name": "Z jakimi aplikacjami działa?", "acceptedAnswer": { "@type": "Answer", "text": "Z Glovo, Wolt, Bolt Food i Uber Eats — czyli z najpopularniejszymi platformami dostaw w Polsce." } },
+      { "@type": "Question", "name": "Skąd OrderPilot wie, ile zarobię?", "acceptedAnswer": { "@type": "Answer", "text": "Z danych zlecenia: kwoty, szacowanego czasu i dystansu. Na tej podstawie wylicza zł/h oraz zł/km i pokazuje wynik kolorem na belce." } },
+      { "@type": "Question", "name": "Jak włączyć?", "acceptedAnswer": { "@type": "Answer", "text": "Po instalacji włączasz dwie zgody (wyświetlanie nad innymi aplikacjami oraz usługę dostępności) i klikasz „Start”. Apka prowadzi krok po kroku." } }
+    ]
+  }
+  </script>
 </head>
 <body>
+  <a class="skip-link" href="#top">Przejdź do treści</a>
 
   <!-- ikony (sprite, styl Lucide) -->
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -52,7 +92,7 @@
   <main id="top">
 
     <!-- ============ HERO = film scrubowany scrollem ============ -->
-    <section class="hero film" id="top" data-beats="4">
+    <section class="hero film" data-beats="4">
       <div class="hero__ambient" aria-hidden="true"></div>
       <div class="film__sticky">
         <div class="container film__center">
@@ -71,7 +111,7 @@
           <div class="film__stage">
             <div class="device__glow" aria-hidden="true"></div>
             <div class="phone phone--film" id="heroPhone">
-              <video class="film__video" muted playsinline preload="auto" disablepictureinpicture
+              <video class="film__video" muted playsinline preload="none" disablepictureinpicture
                      poster="assets/video/demo-poster.jpg">
                 <source src="assets/video/demo.mp4" type="video/mp4" />
               </video>
@@ -83,9 +123,9 @@
             <div class="film__tag glass film__tag--good" data-beat="3"><span class="film__tag-dot film__tag-dot--g"></span>Bierz</div>
             <div class="film__tag glass film__tag--bad" data-beat="3"><span class="film__tag-dot film__tag-dot--r"></span>Odpuść</div>
             <!-- premium connector: krzywa celująca w belkę (pojawia się przy „wpada zlecenie") -->
-            <svg class="film__arrow" viewBox="0 0 104 70" fill="none" aria-hidden="true">
-              <path class="film__arrow-line" d="M98 52 C 66 64, 34 42, 12 20" stroke="var(--accent)" stroke-width="2.4" stroke-linecap="round"/>
-              <path class="film__arrow-tip" d="M15 33 L12 20 L25 25" stroke="var(--accent)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+            <svg class="film__arrow" viewBox="0 0 112 66" fill="none" aria-hidden="true">
+              <path class="film__arrow-line" d="M105 48 C 76 46, 42 35, 18 19" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+              <path class="film__arrow-tip" d="M10.5 12.5 L22 17.5 L15.5 24.5 Z" fill="var(--accent)"/>
             </svg>
           </div>
 
@@ -173,7 +213,7 @@
         <div class="shots">
           <figure class="shot reveal"><img src="assets/screens/main.png" alt="OrderPilot — ekran główny, jeden przycisk Start" loading="lazy" /></figure>
           <figure class="shot reveal"><img src="assets/screens/orange.png" alt="OrderPilot — belka z wynikiem nad zleceniem" loading="lazy" /></figure>
-          <figure class="shot reveal"><img src="assets/screens/green.png" alt="OrderPilot — zielona belka, 44 zł/h" loading="lazy" /></figure>
+          <figure class="shot shot--hero reveal"><img src="assets/screens/green.png" alt="OrderPilot — zielona belka, 44 zł/h" loading="lazy" /><figcaption>Zielona belka · 44 zł/h — bierz</figcaption></figure>
           <figure class="shot reveal"><img src="assets/screens/compare.png" alt="OrderPilot — porównanie dwóch platform" loading="lazy" /></figure>
           <figure class="shot reveal"><img src="assets/screens/settings.png" alt="OrderPilot — ustawienia belki" loading="lazy" /></figure>
         </div>
@@ -187,7 +227,7 @@
         <p class="proof__sub">OrderPilot jest dostępny publicznie w Google Play i używany przez kurierów na realnych zleceniach.</p>
         <ul class="proof__stats">
           <li><span class="proof__big proof__big--live"><span class="dot dot--live"></span>LIVE</span><span class="proof__cap">w Google Play</span></li>
-          <li><span class="proof__big">4</span><span class="proof__cap">platformy</span></li>
+          <li><span class="proof__big" data-count="4">0</span><span class="proof__cap">platformy</span></li>
           <li><span class="proof__big">v1.0.5</span><span class="proof__cap">stabilna wersja</span></li>
           <li><span class="proof__big">0 zł</span><span class="proof__cap">za pobranie</span></li>
         </ul>
@@ -255,9 +295,9 @@
     </div>
   </footer>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/lenis@1/dist/lenis.min.js"></script>
-  <script src="script.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/lenis@1/dist/lenis.min.js"></script>
+  <script defer src="script.js"></script>
 </body>
 </html>

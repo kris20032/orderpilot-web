@@ -77,7 +77,7 @@
         onUpdate: function (self) {
           var p = self.progress, d = video.duration;
           if (d && isFinite(d)) {
-            var t = p * (d - 0.05);
+            var t = p >= 0.999 ? d - 0.02 : p * (d - 0.03);  // dobij do końcówki, ale nie do równego duration
             if (Math.abs(t - video.currentTime) > 0.005) { try { video.currentTime = t; } catch (e) {} }
             // beaty zsynchronizowane z momentami filmu: Start <2s · czeka <6.8s · wpada zlecenie <10.5s · decyzja
             setBeat(t < 2 ? 0 : t < 6.8 ? 1 : t < 10.5 ? 2 : 3);
@@ -88,24 +88,29 @@
       });
       setBeat(0);
       video.addEventListener('loadedmetadata', function () { ScrollTrigger.refresh(); }, { once: true });
-      return function () { st.kill(); };
+      return function () { st.kill(); current = -1; film.classList.remove('is-pointing'); };
     });
 
     // MOBILE / reduced-motion — bez pinu: film gra autoplay-loop, wszystkie beaty widoczne (CSS)
     mm.add('(max-width: 900px), (prefers-reduced-motion: reduce)', function () {
-      video.setAttribute('loop', ''); video.muted = true; video.setAttribute('playsinline', '');
-      var tryPlay = function () { var pr = video.play(); if (pr && pr.catch) pr.catch(function () {}); };
-      whenReady(tryPlay);
+      if (reduce) {
+        // użytkownik nie chce ruchu — zostaw statyczny poster, nie autoodtwarzaj (WCAG 2.2.2)
+        try { video.pause(); } catch (e) {}
+        video.removeAttribute('loop'); video.removeAttribute('autoplay');
+      } else {
+        video.setAttribute('loop', ''); video.muted = true; video.setAttribute('playsinline', '');
+        var tryPlay = function () { var pr = video.play(); if (pr && pr.catch) pr.catch(function () {}); };
+        whenReady(tryPlay);
+      }
       caps.forEach(function (c) { c.classList.add('is-active'); });
       tags.forEach(function (t) { t.classList.remove('is-active'); });
     });
 
-    // gdy karta wraca z tła — Chrome odracza wczytanie wideo w ukrytych kartach; dociągnij i odśwież scrub
+    // gdy karta wraca z tła — Chrome odracza wczytanie wideo w ukrytych kartach; dociągnij ORAZ odśwież scrub
     document.addEventListener('visibilitychange', function () {
-      if (document.visibilityState === 'visible' && video.readyState < 1) {
-        try { video.load(); } catch (e) {}
-        if (window.ScrollTrigger) { ScrollTrigger.refresh(); }
-      }
+      if (document.visibilityState !== 'visible') return;
+      if (video.readyState < 1) { try { video.load(); } catch (e) {} }
+      if (window.ScrollTrigger && ScrollTrigger.getAll().length) { ScrollTrigger.refresh(); }
     });
   }
 
@@ -132,6 +137,31 @@
       rotY(px * 6); rotX(-py * 6);
     }, { passive: true });
     heroSec.addEventListener('mouseleave', function () { rotX(0); rotY(0); });
+  }
+
+  /* ---- 5. Count-up liczb w sekcji proof (premium-detal, w viewport) ---- */
+  var counters = document.querySelectorAll('[data-count]');
+  if (counters.length) {
+    if (!('IntersectionObserver' in window) || reduce) {
+      counters.forEach(function (el) { el.textContent = el.dataset.count + (el.dataset.suf || ''); });
+    } else {
+      var io2 = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (!e.isIntersecting) return;
+          var el = e.target, to = parseFloat(el.dataset.count) || 0, suf = el.dataset.suf || '', start = null;
+          io2.unobserve(el);
+          requestAnimationFrame(function tick(ts) {
+            if (start === null) start = ts;
+            var p = Math.min(1, (ts - start) / 900), eased = p * (2 - p); // easeOutQuad
+            el.textContent = Math.round(to * eased) + suf;
+            if (p < 1) requestAnimationFrame(tick); else el.textContent = to + suf;
+          });
+          // siatka bezpieczeństwa: rAF bywa dławiony (karta w tle) — dociągnij finalną liczbę
+          setTimeout(function () { el.textContent = to + suf; }, 1100);
+        });
+      }, { threshold: 0.6 });
+      counters.forEach(function (el) { io2.observe(el); });
+    }
   }
 
 })();
