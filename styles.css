@@ -359,7 +359,8 @@ section { position: relative; }
 .gallery .section-head { margin: 0 auto 34px; }
 /* coverflow-karuzel (jak shadcnblocks hero231): sterowany indeksem, karty 3D, płynne slajdy */
 .gallery .container { max-width: 1320px; }
-.shots { position: relative; height: clamp(500px, 72vh, 740px); perspective: 2400px; margin-top: 4px; outline: none; --slide-dur: .6s; }
+.shots { position: relative; height: clamp(500px, 72vh, 740px); perspective: 2400px; margin-top: 4px; outline: none; --slide-dur: .6s;
+  transform: scale(var(--zoom, 1)); transform-origin: 50% 46%; }
 /* subtelna poświata-scena za kartami (premium „muted panel" jak w hero231) */
 .shots::before { content: ""; position: absolute; left: 50%; top: 50%; width: min(80%, 820px); height: 80%;
   transform: translate(-50%,-50%); border-radius: 44px; z-index: 0; pointer-events: none;

@@ -275,6 +275,24 @@
         }, { threshold: 0.35 });
         iog.observe(gallery);
       } else { startAuto(); }
+
+      // scroll-zoom: ekrany rosną gdy się zbliżasz → krótko pełny rozmiar → maleją (bez twardego pinu)
+      if (window.gsap && window.ScrollTrigger && !reduce) {
+        var mmZ = gsap.matchMedia();
+        mmZ.add('(min-width: 901px) and (prefers-reduced-motion: no-preference)', function () {
+          var st = ScrollTrigger.create({
+            trigger: '.gallery', start: 'top bottom', end: 'bottom top', scrub: 0.5,
+            onUpdate: function (self) {
+              var p = self.progress, z;
+              if (p < 0.4) z = 0.78 + (p / 0.4) * 0.22;            // 0.78 → 1 (rośnie)
+              else if (p < 0.6) z = 1;                              // krótko pełny (autoplay przesuwa)
+              else z = 1 - ((p - 0.6) / 0.4) * 0.22;                // 1 → 0.78 (maleje)
+              gallery.style.setProperty('--zoom', z.toFixed(3));
+            }
+          });
+          return function () { st.kill(); gallery.style.setProperty('--zoom', '1'); };
+        });
+      }
     }
   }
 
