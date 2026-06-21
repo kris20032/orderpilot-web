@@ -112,14 +112,14 @@
                 <source src="assets/video/demo.mp4" type="video/mp4" />
               </video>
             </div>
-            <!-- pływające liquid-glass opisy, zmieniają się z beatem scrolla -->
-            <div class="film__tag glass is-active" data-beat="0"><span class="film__tag-dot film__tag-dot--g"></span>Start</div>
-            <div class="film__tag glass" data-beat="1"><span class="film__tag-dot"></span>Czeka na zlecenie</div>
-            <div class="film__tag glass film__tag--big" data-beat="2"><span class="film__tag-k">34&nbsp;zł/h</span> · średnie</div>
-            <div class="film__tag glass film__tag--good" data-beat="3"><span class="film__tag-dot film__tag-dot--g"></span>Bierz</div>
-            <div class="film__tag glass film__tag--bad" data-beat="3"><span class="film__tag-dot film__tag-dot--r"></span>Odpuść</div>
-            <!-- świecąca ramka (spotlight) na elemencie ekranu — pozycja per beat (CSS %) -->
-            <div class="film__spot" aria-hidden="true"></div>
+          </div>
+
+          <!-- duży podpis synchronizowany z filmem; krzyżowo przełączany per beat (bez kresek/ramek) -->
+          <div class="film__caps" aria-hidden="true">
+            <p class="film__cap is-active" data-beat="0"><span class="film__cap-step">01</span>Włączasz<br>i&nbsp;ruszasz w&nbsp;trasę.</p>
+            <p class="film__cap" data-beat="1"><span class="film__cap-step">02</span>Czekasz<br>na&nbsp;zlecenie.</p>
+            <p class="film__cap" data-beat="2"><span class="film__cap-step">03</span>Wpada zlecenie.<br><span class="film__cap-big">34&nbsp;zł/h</span><span class="film__cap-sub">kolor mówi: brać czy odpuścić</span></p>
+            <p class="film__cap" data-beat="3"><span class="film__cap-step">04</span><span class="g">Bierz</span> dobre.<br><span class="r">Odpuść</span> słabe.</p>
           </div>
 
           <div class="hero__cta">
