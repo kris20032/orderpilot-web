@@ -65,13 +65,43 @@
     var video = film.querySelector('.film__video');
     var tags  = Array.prototype.slice.call(film.querySelectorAll('.film__tag'));
     var heroCta = document.querySelector('.hero__cta');
+    var stageEl = film.querySelector('.film__stage');
+    var overlay = film.querySelector('.film__overlay');
+    var lead = overlay && overlay.querySelector('.film__lead');
+    var dot  = overlay && overlay.querySelector('.film__dot');
     var BEATS = parseInt(film.getAttribute('data-beats'), 10) || 4;
     var current = -1;
+
+    // prowadnica-adnotacja: linia od etykiety beatu do kotwicy na ekranie + kropka-cel (geometria w JS)
+    function pointArrow(beat) {
+      if (!overlay || !lead || !dot || !window.gsap) return;
+      var hot = film.querySelector('.hot[data-beat="' + beat + '"]');
+      var lab = film.querySelector('.film__tag[data-beat="' + beat + '"]');
+      var s = stageEl.getBoundingClientRect();
+      if (!hot || !lab || !s.width) { hideArrow(); return; }
+      overlay.setAttribute('viewBox', '0 0 ' + s.width + ' ' + s.height);
+      var a = hot.getBoundingClientRect(), l = lab.getBoundingClientRect();
+      var x2 = (a.left + a.width / 2) - s.left, y2 = (a.top + a.height / 2) - s.top;
+      var labCx = (l.left + l.width / 2) - s.left;
+      var x1 = (labCx > x2 ? l.left : l.right) - s.left;       // krawędź etykiety od strony celu
+      var y1 = (l.top + l.height / 2) - s.top;
+      var cx = (x1 + x2) / 2, cy = Math.min(y1, y2) - Math.max(22, Math.abs(x1 - x2) * 0.16);
+      lead.setAttribute('d', 'M' + x1.toFixed(1) + ' ' + y1.toFixed(1) + ' Q ' + cx.toFixed(1) + ' ' + cy.toFixed(1) + ' ' + x2.toFixed(1) + ' ' + y2.toFixed(1));
+      dot.setAttribute('cx', x2.toFixed(1)); dot.setAttribute('cy', y2.toFixed(1));
+      var L = lead.getTotalLength();
+      film.classList.add('is-arrow');
+      gsap.killTweensOf([lead, dot]);
+      gsap.set(lead, { strokeDasharray: L, strokeDashoffset: L });
+      gsap.set(dot, { opacity: 0, scale: 0, svgOrigin: x2 + ' ' + y2 });
+      gsap.to(lead, { strokeDashoffset: 0, duration: 0.5, ease: 'power2.inOut' });
+      gsap.to(dot, { opacity: 1, scale: 1, duration: 0.32, ease: 'back.out(2)', delay: 0.42 });
+    }
+    function hideArrow() { film.classList.remove('is-arrow'); if (lead && window.gsap) gsap.killTweensOf([lead, dot]); }
 
     function setBeat(i) {
       if (i === current) return; current = i;
       tags.forEach(function (t) { t.classList.toggle('is-active', parseInt(t.dataset.beat, 10) === i); });
-      film.classList.toggle('is-pointing', i === 2); // strzałka przy „wpada zlecenie"
+      if (i === 1 || i === 2) pointArrow(i); else hideArrow();  // strzałka tylko dla „czeka" i „wpada zlecenie"
       if (heroCta) heroCta.classList.toggle('is-revealed', i === 3); // CTA jako puenta na finale
     }
 
@@ -108,7 +138,7 @@
       });
       setBeat(0);
       video.addEventListener('loadedmetadata', function () { ScrollTrigger.refresh(); }, { once: true });
-      return function () { st.kill(); current = -1; film.classList.remove('is-pointing'); };
+      return function () { st.kill(); current = -1; hideArrow(); };
     });
 
     // MOBILE / reduced-motion — bez pinu: film gra autoplay-loop, wszystkie beaty widoczne (CSS)
@@ -133,6 +163,13 @@
       if (video.readyState < 1) { try { video.load(); } catch (e) {} }
       if (window.ScrollTrigger && ScrollTrigger.getAll().length) { ScrollTrigger.refresh(); }
     });
+
+    // prowadnica zależy od layoutu — przelicz przy zmianie rozmiaru
+    var arrowRaf;
+    window.addEventListener('resize', function () {
+      if (arrowRaf) cancelAnimationFrame(arrowRaf);
+      arrowRaf = requestAnimationFrame(function () { if (current >= 1 && current <= 3) pointArrow(current); });
+    }, { passive: true });
   }
 
   /* ---- 4. Idle mouse-tilt telefonu (premium „żywy" — quickTo lerp, oddech) ---- */
