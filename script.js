@@ -65,15 +65,46 @@
     var video = film.querySelector('.film__video');
     var tags  = Array.prototype.slice.call(film.querySelectorAll('.film__tag'));
     var heroCta = document.querySelector('.hero__cta');
+    var stageEl = film.querySelector('.film__stage');
+    var spot = film.querySelector('.film__spot');
     var BEATS = parseInt(film.getAttribute('data-beats'), 10) || 4;
     var current = -1;
+
+    // cele zmierzone w pikselach wideo (600×1298) → % wideo (ramka trafia DOKŁADNIE, niezależnie od rozmiaru)
+    var TARGETS = {
+      '1': { x: 0.335, y: 0.033, w: 0.315, h: 0.066, r: 999, side: 'below' }, // pigułka „0,00 zł"
+      '2': { x: 0.02,  y: 0.062, w: 0.96,  h: 0.108, r: 13,  side: 'right' }  // belka 34 zł/h
+    };
+    function placeAnnotation(beat) {
+      var t = TARGETS[beat], tag = film.querySelector('.film__tag[data-beat="' + beat + '"]');
+      if (!t || !tag || !spot || !video) { film.classList.remove('is-spot'); return; }
+      var vr = video.getBoundingClientRect(), sr = stageEl.getBoundingClientRect();
+      if (!vr.width) { film.classList.remove('is-spot'); return; }
+      var vx = vr.left - sr.left, vy = vr.top - sr.top;
+      var L = vx + t.x * vr.width, T = vy + t.y * vr.height, Wd = t.w * vr.width, Hd = t.h * vr.height;
+      var pad = 5;
+      spot.style.left = (L - pad) + 'px'; spot.style.top = (T - pad) + 'px';
+      spot.style.width = (Wd + pad * 2) + 'px'; spot.style.height = (Hd + pad * 2) + 'px';
+      spot.style.borderRadius = t.r + 'px';
+      tag.classList.remove('tail-up', 'tail-left');
+      var cw = tag.offsetWidth, ch = tag.offsetHeight, cx, cy;
+      if (t.side === 'below') {
+        cx = L + Wd / 2 - cw / 2; cy = T + Hd + 16;
+        cx = Math.max(6, Math.min(cx, sr.width - cw - 6));   // trzymaj dymek w telefonie
+        tag.classList.add('tail-up');
+      } else {                                               // po prawej od celu (na zewnątrz telefonu)
+        cx = L + Wd + 18; cy = T + Hd / 2 - ch / 2;
+        tag.classList.add('tail-left');
+      }
+      tag.style.left = cx + 'px'; tag.style.top = cy + 'px'; tag.style.right = 'auto'; tag.style.bottom = 'auto';
+      film.classList.add('is-spot');
+    }
 
     function setBeat(i) {
       if (i === current) return; current = i;
       tags.forEach(function (t) { t.classList.toggle('is-active', parseInt(t.dataset.beat, 10) === i); });
-      for (var b = 0; b < BEATS; b++) film.classList.toggle('beat-' + b, b === i); // pozycja świecącej ramki (CSS)
-      film.classList.toggle('is-spot', i === 1 || i === 2);                          // ramka tylko dla „czeka"/„wpada"
-      if (heroCta) heroCta.classList.toggle('is-revealed', i === 3);                 // CTA jako puenta na finale
+      if (i === 1 || i === 2) placeAnnotation(i); else film.classList.remove('is-spot');
+      if (heroCta) heroCta.classList.toggle('is-revealed', i === 3);
     }
 
     function whenReady(cb) {
@@ -88,6 +119,7 @@
       video.removeAttribute('autoplay'); video.removeAttribute('loop');
       video.preload = 'auto'; video.load();           // wymuś wczytanie (Chrome odracza offscreen)
       try { video.pause(); } catch (e) {}
+      var stickyEl = film.querySelector('.film__sticky');
       var st = ScrollTrigger.create({
         trigger: film,
         start: 'top top',
@@ -105,11 +137,15 @@
           } else {
             setBeat(Math.max(0, Math.min(BEATS - 1, Math.floor(p * BEATS))));
           }
+          // hero znika (fade + lekkie uniesienie) pod koniec scrubu — następna sekcja podciągnięta CSS,
+          // więc telefon nie „wraca" w trailingu, tylko rozpływa się w treść
+          var exit = p > 0.9 ? (p - 0.9) / 0.1 : 0;
+          if (stickyEl) gsap.set(stickyEl, { opacity: 1 - exit, y: -exit * 26 });
         }
       });
       setBeat(0);
       video.addEventListener('loadedmetadata', function () { ScrollTrigger.refresh(); }, { once: true });
-      return function () { st.kill(); current = -1; film.className = film.className.replace(/\bbeat-\d\b/g, '').replace(/\bis-spot\b/g, ''); };
+      return function () { st.kill(); current = -1; if (stickyEl) gsap.set(stickyEl, { opacity: 1, y: 0 }); film.classList.remove('is-spot'); };
     });
 
     // MOBILE / reduced-motion — bez pinu: film gra autoplay-loop, wszystkie beaty widoczne (CSS)
@@ -134,6 +170,13 @@
       if (video.readyState < 1) { try { video.load(); } catch (e) {} }
       if (window.ScrollTrigger && ScrollTrigger.getAll().length) { ScrollTrigger.refresh(); }
     });
+
+    // ramka/dymek zależą od layoutu — przelicz przy zmianie rozmiaru
+    var spotRaf;
+    window.addEventListener('resize', function () {
+      if (spotRaf) cancelAnimationFrame(spotRaf);
+      spotRaf = requestAnimationFrame(function () { if (current === 1 || current === 2) placeAnnotation(current); });
+    }, { passive: true });
 
   }
 

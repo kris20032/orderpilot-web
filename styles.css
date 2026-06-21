@@ -190,7 +190,8 @@ section { position: relative; }
 .device-caption { font-size: .82rem; color: var(--faint); text-align: center; max-width: 280px; }
 
 /* ---------- PLATFORMS ---------- */
-.platforms { padding: 30px 0 10px; }
+/* podciągnięcie pod hero: kasuje 100svh „trailingu" przypiętego hero (telefon nie zjeżdża ponownie) */
+.platforms { padding: 30px 0 10px; margin-top: -100svh; position: relative; z-index: 1; }
 .platforms__label { text-align: center; color: var(--faint); font-size: .82rem; font-weight: 500; letter-spacing: .03em; margin-bottom: 20px; }
 .platforms__list { list-style: none; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
 .chip { display: inline-flex; align-items: center; gap: 9px; padding: 8px 17px 8px 9px; border-radius: 999px; font-weight: 700; font-size: .95rem; letter-spacing: -.01em; background: rgba(255,255,255,.05); border: 1px solid var(--line-2); color: var(--brand, var(--text)); transition: border-color .18s, background .18s, transform .18s var(--ease); }
@@ -280,12 +281,10 @@ section { position: relative; }
   transition: opacity .4s var(--ease-out), transform .4s var(--ease-out),
     left .55s var(--ease-out), top .55s var(--ease-out), width .55s var(--ease-out), height .55s var(--ease-out), border-radius .4s var(--ease); }
 .film.is-spot .film__spot { opacity: 1; transform: scale(1); }
-.film.beat-1 .film__spot { left: 30%; top: 5.4%; width: 40%; height: 5.6%; border-radius: 999px; }   /* pigułka „0,00 zł" */
-.film.beat-2 .film__spot { left: 4.5%; top: 8.8%; width: 91%; height: 9.4%; border-radius: 13px; }   /* belka 34 zł/h */
 
 /* --- HERO: telefon-bohater (duży, wyśrodkowany, główna warstwa) --- */
 .hero.film { padding: 0; }
-.hero.film .film__sticky { height: 100svh; min-height: 560px; padding: 0; display: block; overflow: hidden; }
+.hero.film .film__sticky { height: 100svh; min-height: 560px; padding: 0; display: block; overflow: hidden; background: var(--bg); }
 .hero .film__center { position: relative; height: 100%; display: grid;
   grid-template-rows: auto minmax(0,1fr); align-items: center; justify-items: center;
   gap: clamp(8px, 1.6vh, 20px); padding: clamp(20px,4vh,40px) 16px clamp(14px,2.4vh,28px); text-align: center; }
@@ -313,15 +312,14 @@ html.js .hero__title { opacity: 0; }                 /* FOUC-guard: ukryty do an
 .film__tag-dot--r { background: var(--red); }
 .film__tag--good, .film__tag--bad { bottom: auto; }
 .hero .film__tag[data-beat="0"] { top: 15%; left: -26px; right: auto; }
-.hero .film__tag[data-beat="1"] { top: 4%;   right: -158px; left: auto; }
-.hero .film__tag[data-beat="2"] { top: 9.5%; right: -170px; left: auto; }
+/* beaty 1 i 2 pozycjonuje JS (przy podświetlonym elemencie) — patrz placeAnnotation */
 .hero .film__tag--good { top: auto; bottom: 27%; right: -22px; left: auto; }
 .hero .film__tag--bad  { top: auto; bottom: 12%; left: -20px; right: auto; }
-/* dymki beatów z ramką — ogonek na lewej krawędzi, celuje w podświetlony element */
-.hero .film__tag[data-beat="1"]::after,
-.hero .film__tag[data-beat="2"]::after {
-  content: ""; position: absolute; left: -6px; top: 50%; transform: translateY(-50%);
-  border: 6px solid transparent; border-right-color: rgba(255,255,255,.85); }
+/* ogonek dymka — celuje w podświetlony element (kierunek ustawia JS klasą) */
+.film__tag.tail-up::after, .film__tag.tail-left::after {
+  content: ""; position: absolute; border: 7px solid transparent; }
+.film__tag.tail-up::after  { top: -13px; left: 50%; transform: translateX(-50%); border-bottom-color: rgba(255,255,255,.92); }
+.film__tag.tail-left::after { left: -13px; top: 50%; transform: translateY(-50%); border-right-color: rgba(255,255,255,.92); }
 
 /* ---------- FEATURES (bento) ---------- */
 .features { padding: 130px 0; border-top: 1px solid var(--line); }
@@ -466,6 +464,7 @@ html.js .hero__title { opacity: 0; }                 /* FOUC-guard: ukryty do an
 
 /* ---------- RESPONSIVE ---------- */
 @media (max-width: 900px) {
+  .platforms { margin-top: 0; }   /* mobile: brak pinu → brak trailingu do skasowania */
   .hero { padding: 124px 0 80px; }
   .hero__inner { grid-template-columns: 1fr; gap: 52px; text-align: center; }
   .hero__copy { display: flex; flex-direction: column; align-items: center; }
