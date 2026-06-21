@@ -176,12 +176,23 @@
     var N = cards.length;
     if (N) {
       var dotsWrap = document.querySelector('.shots__dots');
+      var capEl = document.querySelector('.shots__cap');
       var dots = null;
       var active = cards.findIndex(function (c) { return c.getAttribute('data-pos') === '0'; });
       if (active < 0) active = Math.floor(N / 2);
       var desktopMQ = window.matchMedia('(min-width: 901px)');
-      var auto = null, AUTO_MS = 3800;
+      var auto = null, AUTO_MS = 3800, capTimer = null;
 
+      function setCap() {
+        if (!capEl) return;
+        var txt = cards[active].getAttribute('data-cap') || '';
+        if (txt === capEl._cur) return;
+        if (capEl._cur == null) { capEl._cur = txt; capEl.textContent = txt; capEl.classList.add('is-in'); return; }
+        capEl._cur = txt;
+        capEl.classList.remove('is-in');                 // wyblakanie
+        clearTimeout(capTimer);
+        capTimer = setTimeout(function () { capEl.textContent = txt; capEl.classList.add('is-in'); }, 220);
+      }
       function layout() {
         for (var i = 0; i < N; i++) {
           var rel = ((i - active) % N + N) % N;          // 0..N-1
@@ -190,6 +201,7 @@
           cards[i].setAttribute('aria-hidden', pos === 0 ? 'false' : 'true');
         }
         if (dots) dots.forEach(function (d, n) { d.classList.toggle('is-active', n === active); });
+        setCap();
       }
       function go(i) {
         var from = active;

@@ -359,7 +359,7 @@ section { position: relative; }
 .gallery .section-head { margin: 0 auto 34px; }
 /* coverflow-karuzel (jak shadcnblocks hero231): sterowany indeksem, karty 3D, płynne slajdy */
 .gallery .container { max-width: 1320px; }
-.shots { position: relative; height: clamp(520px, 80vh, 800px); perspective: 2400px; margin-top: 4px; outline: none; --slide-dur: .6s; }
+.shots { position: relative; height: clamp(500px, 72vh, 740px); perspective: 2400px; margin-top: 4px; outline: none; --slide-dur: .6s; }
 /* subtelna poświata-scena za kartami (premium „muted panel" jak w hero231) */
 .shots::before { content: ""; position: absolute; left: 50%; top: 50%; width: min(80%, 820px); height: 80%;
   transform: translate(-50%,-50%); border-radius: 44px; z-index: 0; pointer-events: none;
@@ -381,13 +381,12 @@ section { position: relative; }
 .shots .shot[data-pos="hide"] { opacity: 0; pointer-events: none; z-index: 1;
   transform: translate(-50%,-50%) scale(.6); }
 .shot:hover { box-shadow: 0 64px 110px -34px rgba(26,23,20,.42); }
-/* podpis na środkowej karcie — konkret + mikrointerakcja hover */
-.shot figcaption { position: absolute; left: 12px; bottom: 12px; z-index: 3;
-  font: 600 .78rem/1 var(--mono); color: #fff; background: rgba(26,23,20,.72);
-  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
-  padding: 7px 11px; border-radius: 10px; white-space: nowrap;
-  opacity: 0; transform: translateY(6px); transition: opacity .3s var(--ease-out), transform .3s var(--ease-out); }
-.shots .shot--hero[data-pos="0"]:hover figcaption { opacity: 1; transform: none; }
+/* dynamiczny podpis pod aktywnym ekranem — liquid glass, zmienia się z karuzelą */
+.shots__cap { width: max-content; max-width: 86%; margin: 22px auto 0; padding: 11px 22px; border-radius: 999px;
+  font-family: var(--sans); font-weight: 600; font-size: 1.02rem; letter-spacing: -.01em; color: var(--text);
+  text-align: center; opacity: 0; transform: translateY(8px);
+  transition: opacity .4s var(--ease-out), transform .4s var(--ease-out); }
+.shots__cap.is-in { opacity: 1; transform: none; }
 /* kropki nawigacji */
 .shots__dots { display: flex; justify-content: center; gap: 9px; margin-top: 28px; }
 .shots__dots button { width: 9px; height: 9px; padding: 0; border: none; border-radius: 50%;
@@ -472,7 +471,7 @@ section { position: relative; }
     position: relative; left: auto; top: auto; height: auto; flex: 0 0 66%; width: auto; max-width: 260px;
     opacity: 1; transform: none; margin: 0; scroll-snap-align: center; }
   .shots .shot img { width: 100%; height: auto; }
-  .shots__dots { display: none; }
+  .shots__dots, .shots__cap { display: none; }
   /* film: na mobile bez pinu/scrubu — film gra autoplay-loop, tekst nad nim stosem */
   .film__sticky { min-height: 0; padding: 64px 0; }
   .film__inner { grid-template-columns: 1fr; gap: 30px; text-align: center; }
