@@ -41,6 +41,23 @@
     revealEls.forEach(function (el) { el.classList.add('in'); });
   }
 
+  /* ---- 2b. Kinetyczny nagłówek hero — duże litery wjeżdżają linia po linii (SplitText) ---- */
+  (function () {
+    var h1 = document.querySelector('.hero__title');
+    if (!h1) return;
+    var show = function () { h1.style.opacity = '1'; };
+    if (reduce || !window.gsap || !window.SplitText) { show(); return; }
+    var run = function () {
+      try {
+        gsap.registerPlugin(SplitText);
+        var sp = SplitText.create(h1, { type: 'lines', mask: 'lines', linesClass: 'line', autoSplit: true });
+        show();
+        gsap.from(sp.lines, { yPercent: 115, opacity: 0, duration: 0.9, stagger: 0.12, ease: 'expo.out' });
+      } catch (e) { show(); }
+    };
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(run); else run();
+  })();
+
   /* ---- 3. FILM: wideo scrubowane scrollem + kinetyczne beaty (GSAP) ---- */
   var film = document.querySelector('.film');
   if (film && window.gsap && window.ScrollTrigger) {
