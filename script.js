@@ -73,7 +73,6 @@
       if (i === current) return; current = i;
       caps.forEach(function (c) { c.classList.toggle('is-active', parseInt(c.dataset.beat, 10) === i); });
       if (heroCta) heroCta.classList.toggle('is-revealed', i === 3);
-      focusEmphasis(i === 2);          // reflektor tylko na „money beat" (wpada zlecenie / 34 zł/h)
     }
 
     /* ---- Reflektor uwagi na stawce: BEZ wskaźnika, czysty fokus (przygaszenie reszty ekranu + lift belki) ---- */
@@ -84,6 +83,7 @@
     // zmierzone z demo.mp4: belka = pełna szerokość, wysokość 10.5%; TOP zmienny (belkę da się przeciągać)
     var RATE = { left: 0.0, width: 1.0, height: 0.105 };
     var PADX = 1.4, PADY = 1.6;  // % oddech halo wokół belki
+    var FOCUS_IN = 7.6, FOCUS_OUT = 10.5;  // reflektor TYLKO gdy belka jest realnie na ekranie (zmierzone z demo.mp4)
     // trajektoria TOP belki w czasie filmu (zmierzona): u góry → przeciągnięta w dół ~16% → wraca
     var TRACK = [[0, 0.065], [9.2, 0.065], [9.4, 0.077], [9.6, 0.106], [9.8, 0.133],
                  [10.0, 0.159], [10.4, 0.160], [10.6, 0.123], [11.0, 0.083], [20, 0.083]];
@@ -168,6 +168,7 @@
             if (Math.abs(t - video.currentTime) > 0.005) { try { video.currentTime = t; } catch (e) {} }
             // beaty zsynchronizowane z momentami filmu: Start <2s · czeka <6.8s · wpada zlecenie <10.5s · decyzja
             setBeat(t < 2 ? 0 : t < 6.8 ? 1 : t < 10.5 ? 2 : 3);
+            focusEmphasis(t >= FOCUS_IN && t <= FOCUS_OUT); // reflektor pojawia się/znika dokładnie gdy belka jest na ekranie
             if (focusShown) setBelkaTop(belkaTopAt(t));     // halo + jasna strefa jadą za przeciąganą belką
           } else {
             setBeat(Math.max(0, Math.min(BEATS - 1, Math.floor(p * BEATS))));
