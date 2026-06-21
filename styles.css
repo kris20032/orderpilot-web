@@ -357,12 +357,12 @@ section { position: relative; }
 /* ---------- GALLERY (czyste karty-zdjęcia, jak hero231) ---------- */
 .gallery { padding: 110px 0; }
 /* coverflow-karuzel (jak shadcnblocks hero231): sterowany indeksem, karty 3D, płynne slajdy */
-.shots { position: relative; height: clamp(420px, 56vh, 580px); perspective: 1900px; margin-top: 6px; outline: none; }
-.shot { position: absolute; left: 50%; top: 50%; height: 86%; width: auto;
-  border-radius: 26px; overflow: hidden; border: 1px solid var(--line); background: #fff;
+.shots { position: relative; height: clamp(470px, 64vh, 660px); perspective: 2100px; margin-top: 6px; outline: none; --slide-dur: .55s; }
+.shot { position: absolute; left: 50%; top: 50%; height: 90%; width: auto;
+  border-radius: 28px; overflow: hidden; border: 1px solid var(--line); background: #fff;
   box-shadow: 0 30px 60px -34px rgba(26,23,20,.30); transform-style: preserve-3d; cursor: pointer;
   transform: translate(-50%,-50%);
-  transition: transform .6s var(--ease-out), opacity .5s var(--ease), box-shadow .4s var(--ease);
+  transition: transform var(--slide-dur) var(--ease-out), opacity .5s var(--ease), box-shadow .4s var(--ease);
   will-change: transform; }
 .shot img { display: block; height: 100%; width: auto; }
 /* sloty coverflow — wyższa specyficzność (.shots .shot[...]) niż .reveal.in, by transform nie zniknął */

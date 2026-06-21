@@ -186,7 +186,13 @@
         }
         if (dots) dots.forEach(function (d, n) { d.classList.toggle('is-active', n === active); });
       }
-      function go(i) { active = ((i % N) + N) % N; layout(); }
+      function go(i) {
+        var from = active;
+        active = ((i % N) + N) % N;
+        var d = Math.abs(active - from); d = Math.min(d, N - d);          // dystans cyrkularny (1..2)
+        gallery.style.setProperty('--slide-dur', (0.5 + Math.max(0, d - 1) * 0.45).toFixed(2) + 's'); // stała prędkość
+        layout();
+      }
       function next() { go(active + 1); }
       function prev() { go(active - 1); }
       function startAuto() { if (reduce || !desktopMQ.matches || auto) return; auto = setInterval(next, AUTO_MS); }
@@ -205,10 +211,18 @@
         });
       }
 
-      // klik centruje; hover centruje (tylko desktop — żeby na dotyku nie skakało)
+      // klik centruje wprost; hover robi JEDEN krok w stronę karty (z pauzą — bez „spiny")
+      var hoverLock = false;
       cards.forEach(function (c, i) {
         c.addEventListener('click', function () { go(i); restartAuto(); });
-        c.addEventListener('mouseenter', function () { if (desktopMQ.matches) go(i); });
+        c.addEventListener('mouseenter', function () {
+          if (!desktopMQ.matches || hoverLock) return;
+          var p = parseInt(c.getAttribute('data-pos'), 10) || 0;
+          if (p === 0) return;                       // środek — nic nie rób
+          hoverLock = true;
+          setTimeout(function () { hoverLock = false; }, 520);
+          if (p > 0) next(); else prev();            // jeden spokojny krok w stronę najechanej karty
+        });
       });
 
       // autoplay pauzuje na hover całej galerii
