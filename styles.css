@@ -355,15 +355,16 @@ section { position: relative; }
               radial-gradient(40% 34% at 80% 30%, rgba(26,157,84,.05), transparent 72%); }
 
 /* ---------- GALLERY (czyste karty-zdjęcia, jak hero231) ---------- */
-.gallery { padding: 110px 0; }
+.gallery { padding: 92px 0 96px; }
+.gallery .section-head { margin: 0 auto 34px; }
 /* coverflow-karuzel (jak shadcnblocks hero231): sterowany indeksem, karty 3D, płynne slajdy */
 .gallery .container { max-width: 1320px; }
-.shots { position: relative; height: clamp(500px, 72vh, 720px); perspective: 2300px; margin-top: 10px; outline: none; --slide-dur: .6s; }
+.shots { position: relative; height: clamp(520px, 80vh, 800px); perspective: 2400px; margin-top: 4px; outline: none; --slide-dur: .6s; }
 /* subtelna poświata-scena za kartami (premium „muted panel" jak w hero231) */
 .shots::before { content: ""; position: absolute; left: 50%; top: 50%; width: min(80%, 820px); height: 80%;
   transform: translate(-50%,-50%); border-radius: 44px; z-index: 0; pointer-events: none;
   background: radial-gradient(58% 60% at 50% 42%, rgba(238,90,30,.07), transparent 72%); filter: blur(22px); }
-.shot { position: absolute; left: 50%; top: 50%; height: 92%; width: auto;
+.shot { position: absolute; left: 50%; top: 50%; height: 95%; width: auto;
   border-radius: 30px; overflow: hidden; border: 1px solid var(--line); background: #fff;
   box-shadow: 0 34px 70px -34px rgba(26,23,20,.32); transform-style: preserve-3d; cursor: pointer;
   transform: translate(-50%,-50%);
@@ -373,10 +374,10 @@ section { position: relative; }
 /* sloty coverflow — wyższa specyficzność (.shots .shot[...]) niż .reveal.in, by transform nie zniknął */
 .shots .shot[data-pos="0"]  { transform: translate(-50%,-50%) translateZ(0) rotateY(0deg) scale(1); z-index: 5;
   box-shadow: 0 60px 110px -36px rgba(26,23,20,.46); }
-.shots .shot[data-pos="1"]  { transform: translate(-50%,-50%) translateX(90%)   translateZ(-70px)  rotateY(-19deg) scale(.84); z-index: 4; }
-.shots .shot[data-pos="-1"] { transform: translate(-50%,-50%) translateX(-90%)  translateZ(-70px)  rotateY(19deg)  scale(.84); z-index: 4; }
-.shots .shot[data-pos="2"]  { transform: translate(-50%,-50%) translateX(166%)  translateZ(-150px) rotateY(-25deg) scale(.66); z-index: 3; filter: brightness(.96); }
-.shots .shot[data-pos="-2"] { transform: translate(-50%,-50%) translateX(-166%) translateZ(-150px) rotateY(25deg)  scale(.66); z-index: 3; filter: brightness(.96); }
+.shots .shot[data-pos="1"]  { transform: translate(-50%,-50%) translateX(86%)   translateZ(-95px)  rotateY(-19deg) scale(.80); z-index: 4; filter: brightness(.985); }
+.shots .shot[data-pos="-1"] { transform: translate(-50%,-50%) translateX(-86%)  translateZ(-95px)  rotateY(19deg)  scale(.80); z-index: 4; filter: brightness(.985); }
+.shots .shot[data-pos="2"]  { transform: translate(-50%,-50%) translateX(158%)  translateZ(-200px) rotateY(-25deg) scale(.60); z-index: 3; filter: brightness(.94); }
+.shots .shot[data-pos="-2"] { transform: translate(-50%,-50%) translateX(-158%) translateZ(-200px) rotateY(25deg)  scale(.60); z-index: 3; filter: brightness(.94); }
 .shots .shot[data-pos="hide"] { opacity: 0; pointer-events: none; z-index: 1;
   transform: translate(-50%,-50%) scale(.6); }
 .shot:hover { box-shadow: 0 64px 110px -34px rgba(26,23,20,.42); }
