@@ -46,18 +46,16 @@
   if (film && window.gsap && window.ScrollTrigger) {
     gsap.registerPlugin(ScrollTrigger);
     var video = film.querySelector('.film__video');
-    var caps  = Array.prototype.slice.call(film.querySelectorAll('.film__cap'));
     var tags  = Array.prototype.slice.call(film.querySelectorAll('.film__tag'));
-    var dots  = Array.prototype.slice.call(film.querySelectorAll('.film__dots i'));
+    var heroCta = document.querySelector('.hero__cta');
     var BEATS = parseInt(film.getAttribute('data-beats'), 10) || 4;
     var current = -1;
 
     function setBeat(i) {
       if (i === current) return; current = i;
-      caps.forEach(function (c, n) { c.classList.toggle('is-active', n === i); });
-      dots.forEach(function (d, n) { d.classList.toggle('is-active', n === i); });
       tags.forEach(function (t) { t.classList.toggle('is-active', parseInt(t.dataset.beat, 10) === i); });
       film.classList.toggle('is-pointing', i === 2); // strzałka przy „wpada zlecenie"
+      if (heroCta) heroCta.classList.toggle('is-revealed', i === 3); // CTA jako puenta na finale
     }
 
     function whenReady(cb) {
@@ -107,8 +105,9 @@
         var tryPlay = function () { var pr = video.play(); if (pr && pr.catch) pr.catch(function () {}); };
         whenReady(tryPlay);
       }
-      caps.forEach(function (c) { c.classList.add('is-active'); });
-      tags.forEach(function (t) { t.classList.remove('is-active'); });
+      // mobile/reduce: pokaż „money beat" (34 zł/h) statycznie + CTA widoczne (wartość + konwersja zostają)
+      tags.forEach(function (t) { t.classList.toggle('is-active', parseInt(t.dataset.beat, 10) === 2); });
+      if (heroCta) heroCta.classList.add('is-revealed');
     });
 
     // gdy karta wraca z tła — Chrome odracza wczytanie wideo w ukrytych kartach; dociągnij ORAZ odśwież scrub
