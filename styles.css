@@ -124,7 +124,7 @@ section { position: relative; }
 /* ---------- HERO ---------- */
 .hero { padding: 150px 0 96px; }
 .hero__ambient {
-  position: absolute; top: -15%; right: -12%; width: 70vw; max-width: 860px; height: 80%; z-index: 0; pointer-events: none;
+  position: absolute; top: -15%; right: 0; width: 70vw; max-width: 760px; height: 80%; z-index: 0; pointer-events: none;
   background: radial-gradient(circle at 70% 35%, rgba(238,90,30,.10), transparent 72%);
   filter: blur(55px); opacity: .55;
 }
