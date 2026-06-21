@@ -307,19 +307,17 @@ html.js .hero__title { opacity: 0; }                 /* FOUC-guard: ukryty do an
   grid-template-columns: minmax(0, 320px);
   align-content: center; justify-content: end; text-align: right; }
 
-/* —— Reflektor uwagi na stawce (beat 2): przygaszenie reszty ekranu + halo na belce. Bez wskaźnika, czysty fokus. —— */
-.hero .film__focus { position: absolute; inset: 0; z-index: 5; pointer-events: none; opacity: 0; }
-/* SCRIM — ciepły welon na ekranie z WYCIĘTĄ dziurą wokół belki stawki (środek czysty) */
-.hero .film__focus-scrim { position: absolute; inset: 0; border-radius: 46px; opacity: 0;
-  background: radial-gradient(
-    ellipse var(--hrx, 180px) var(--hry, 120px) at var(--hx, 50%) var(--hy, 14%),
-    rgba(26,23,20,0) 0%, rgba(26,23,20,0) 64%, rgba(26,23,20,.14) 82%, rgba(26,23,20,.34) 100%); }
-/* HALO + lift — świetlna poświata dokładnie na prostokącie belki; sygnatura = subtelny hairline marki */
-.hero .film__focus-halo { position: absolute; left: 0; top: 0; opacity: 0;
-  width: var(--bw, 200px); height: var(--bh, 40px); transform: translate(var(--bx, 0px), var(--by, 0px));
-  border-radius: 16px;
-  box-shadow: 0 14px 38px -8px rgba(238,90,30,.40), 0 4px 14px -4px rgba(0,0,0,.22);
-  background: radial-gradient(120% 150% at 50% 0%, rgba(255,255,255,.12), transparent 72%); }
+/* —— Reflektor uwagi na stawce (beat 2): box ustawia JS = DOKŁADNIE nad wideo (w telefonie → jedzie z przechyłem) —— */
+.hero .film__focus { position: absolute; z-index: 2; pointer-events: none; opacity: 0; overflow: hidden; border-radius: 34px; }
+/* SCRIM — ciepły welon z jasną strefą wokół belki (środek czysty), reszta ekranu łagodnie przygasa */
+.hero .film__focus-scrim { position: absolute; inset: 0; opacity: 0;
+  background: radial-gradient(ellipse var(--hrx, 72%) var(--hry, 25%) at 50% var(--hcy, 11.7%),
+    rgba(26,23,20,0) 0%, rgba(26,23,20,0) 60%, rgba(26,23,20,.12) 80%, rgba(26,23,20,.32) 100%); }
+/* HALO — miękka poświata + lift DOKŁADNIE na belce (% wideo, ustawiane przez JS) */
+.hero .film__focus-halo { position: absolute; opacity: 0;
+  left: var(--bl, 0%); top: var(--bt, 5.1%); width: var(--bw, 100%); height: var(--bh, 13.3%);
+  border-radius: 15px;
+  box-shadow: 0 0 24px 2px rgba(238,90,30,.48), 0 7px 16px -12px rgba(0,0,0,.16); }
 @media (prefers-reduced-motion: reduce) { .hero .film__focus { display: none !important; } }
 
 /* ---------- FEATURES (bento) ---------- */

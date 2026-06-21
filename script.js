@@ -80,30 +80,25 @@
     var focusEl    = film.querySelector('.film__focus');
     var focusScrim = focusEl && focusEl.querySelector('.film__focus-scrim');
     var focusHalo  = focusEl && focusEl.querySelector('.film__focus-halo');
-    var focusStage = film.querySelector('.film__stage');   // rodzic telefonu (perspektywa+tilt) → reflektor jedzie z ekranem
     var focusShown = false;
-    var RATE = { left: 0.02, top: 0.065, width: 0.96, height: 0.105 };  // proporcje belki stawki na wideo
+    // zmierzone z demo.mp4: belka stawki = top 6.5%, wysokość 10.5%, pełna szerokość
+    var RATE = { left: 0.0, top: 0.065, width: 1.0, height: 0.105 };
+    var PADX = 1.4, PADY = 1.6;  // % oddech halo wokół belki
 
-    // policz prostokąt belki z REALNEGO rozmiaru wideo (telefon skaluje się wysokością), względem .film__stage
+    // nałóż reflektor DOKŁADNIE na wideo przez OFFSETY (niezależne od przechyłu telefonu); halo/scrim w % wideo
     function placeFocus() {
-      if (!focusEl || !video || !focusStage) return;
-      var v = video.getBoundingClientRect();
-      var s = focusStage.getBoundingClientRect();
-      if (!v.width || !v.height) return;                    // wideo bez wymiarów — pomiń
-      var bx = (v.left - s.left) + v.width  * RATE.left;
-      var by = (v.top  - s.top ) + v.height * RATE.top;
-      var bw = v.width  * RATE.width;
-      var bh = v.height * RATE.height;
-      var pad = Math.round(bh * 0.18);                      // mały oddech, by halo obejmowało belkę
-      focusHalo.style.setProperty('--bx', (bx - pad) + 'px');
-      focusHalo.style.setProperty('--by', (by - pad) + 'px');
-      focusHalo.style.setProperty('--bw', (bw + pad * 2) + 'px');
-      focusHalo.style.setProperty('--bh', (bh + pad * 2) + 'px');
-      var cx = bx + bw / 2, cy = by + bh / 2;               // środek + promień „dziury" reflektora
-      focusScrim.style.setProperty('--hx', cx + 'px');
-      focusScrim.style.setProperty('--hy', cy + 'px');
-      focusScrim.style.setProperty('--hrx', Math.round(bw * 0.7) + 'px');
-      focusScrim.style.setProperty('--hry', Math.round(bh * 2.7) + 'px');   // wyższa jasna strefa: oferta u góry zostaje jasna, przygasa pusty dół
+      if (!focusEl || !video) return;
+      var w = video.offsetWidth, h = video.offsetHeight;
+      if (!w || !h) return;                                 // wideo bez wymiarów — pomiń
+      focusEl.style.left = video.offsetLeft + 'px';
+      focusEl.style.top = video.offsetTop + 'px';
+      focusEl.style.width = w + 'px';
+      focusEl.style.height = h + 'px';
+      focusHalo.style.setProperty('--bl', (RATE.left * 100 - PADX) + '%');
+      focusHalo.style.setProperty('--bt', (RATE.top * 100 - PADY) + '%');
+      focusHalo.style.setProperty('--bw', (RATE.width * 100 + PADX * 2) + '%');
+      focusHalo.style.setProperty('--bh', (RATE.height * 100 + PADY * 2) + '%');
+      focusScrim.style.setProperty('--hcy', ((RATE.top + RATE.height / 2) * 100) + '%');  // środek jasnej strefy = środek belki
     }
 
     // pokaż / ukryj reflektor (wołane z setBeat: on = beat 2)
