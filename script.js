@@ -9,7 +9,12 @@
   /* ---- 0. Lenis smooth-scroll (maślany feel; desktop, spięty z GSAP) ---- */
   if (window.Lenis && window.gsap && !reduce && window.matchMedia('(min-width: 901px)').matches) {
     var lenis = new Lenis({ lerp: 0.09, smoothWheel: true, wheelMultiplier: 1 });
-    if (window.ScrollTrigger) { lenis.on('scroll', ScrollTrigger.update); }
+    if (window.ScrollTrigger) {
+      lenis.on('scroll', ScrollTrigger.update);
+      // KLUCZOWE: gdy ScrollTrigger dodaje/zmienia pin-spacer, wysokość strony rośnie —
+      // Lenis musi przeliczyć limit, inaczej utyka tuż za pinem (telefon „odjeżdża"/wraca na dole)
+      ScrollTrigger.addEventListener('refresh', function () { lenis.resize(); });
+    }
     gsap.ticker.add(function (time) { lenis.raf(time * 1000); });
     gsap.ticker.lagSmoothing(0);
   }
