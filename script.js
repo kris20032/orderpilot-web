@@ -73,7 +73,60 @@
       if (i === current) return; current = i;
       caps.forEach(function (c) { c.classList.toggle('is-active', parseInt(c.dataset.beat, 10) === i); });
       if (heroCta) heroCta.classList.toggle('is-revealed', i === 3);
+      focusEmphasis(i === 2);          // reflektor tylko na „money beat" (wpada zlecenie / 34 zł/h)
     }
+
+    /* ---- Reflektor uwagi na stawce: BEZ wskaźnika, czysty fokus (przygaszenie reszty ekranu + lift belki) ---- */
+    var focusEl    = film.querySelector('.film__focus');
+    var focusScrim = focusEl && focusEl.querySelector('.film__focus-scrim');
+    var focusHalo  = focusEl && focusEl.querySelector('.film__focus-halo');
+    var focusStage = film.querySelector('.film__stage');   // rodzic telefonu (perspektywa+tilt) → reflektor jedzie z ekranem
+    var focusShown = false;
+    var RATE = { left: 0.02, top: 0.065, width: 0.96, height: 0.105 };  // proporcje belki stawki na wideo
+
+    // policz prostokąt belki z REALNEGO rozmiaru wideo (telefon skaluje się wysokością), względem .film__stage
+    function placeFocus() {
+      if (!focusEl || !video || !focusStage) return;
+      var v = video.getBoundingClientRect();
+      var s = focusStage.getBoundingClientRect();
+      if (!v.width || !v.height) return;                    // wideo bez wymiarów — pomiń
+      var bx = (v.left - s.left) + v.width  * RATE.left;
+      var by = (v.top  - s.top ) + v.height * RATE.top;
+      var bw = v.width  * RATE.width;
+      var bh = v.height * RATE.height;
+      var pad = Math.round(bh * 0.18);                      // mały oddech, by halo obejmowało belkę
+      focusHalo.style.setProperty('--bx', (bx - pad) + 'px');
+      focusHalo.style.setProperty('--by', (by - pad) + 'px');
+      focusHalo.style.setProperty('--bw', (bw + pad * 2) + 'px');
+      focusHalo.style.setProperty('--bh', (bh + pad * 2) + 'px');
+      var cx = bx + bw / 2, cy = by + bh / 2;               // środek + promień „dziury" reflektora
+      focusScrim.style.setProperty('--hx', cx + 'px');
+      focusScrim.style.setProperty('--hy', cy + 'px');
+      focusScrim.style.setProperty('--hrx', Math.round(bw * 0.7) + 'px');
+      focusScrim.style.setProperty('--hry', Math.round(bh * 2.7) + 'px');   // wyższa jasna strefa: oferta u góry zostaje jasna, przygasa pusty dół
+    }
+
+    // pokaż / ukryj reflektor (wołane z setBeat: on = beat 2)
+    function focusEmphasis(on) {
+      if (!focusEl) return;
+      if (on === focusShown) return; focusShown = on;
+      gsap.killTweensOf([focusEl, focusScrim, focusHalo]);
+      if (on) {
+        placeFocus();
+        gsap.set(focusEl, { opacity: 1 });
+        gsap.fromTo(focusScrim, { opacity: 0 }, { opacity: 1, duration: 0.55, ease: 'power2.out', delay: 0.06 });
+        gsap.fromTo(focusHalo, { opacity: 0, scale: 0.985, y: 4 },
+          { opacity: 1, scale: 1, y: 0, duration: 0.6, ease: 'power3.out', delay: 0.12, transformOrigin: '50% 50%' });
+      } else {
+        gsap.to(focusEl,  { opacity: 0, duration: 0.4, ease: 'power2.inOut' });
+        gsap.to(focusHalo, { scale: 0.99, duration: 0.4, ease: 'power2.inOut' });
+      }
+    }
+
+    // pozycja celu musi nadążać za skalowaniem telefonu (resize/refresh) i wczytaniem metadanych wideo
+    window.addEventListener('resize', function () { if (focusShown) placeFocus(); }, { passive: true });
+    ScrollTrigger.addEventListener('refresh', function () { if (focusShown) placeFocus(); });
+    video.addEventListener('loadedmetadata', function () { if (focusShown) placeFocus(); });
 
     function whenReady(cb) {
       if (video.readyState >= 1 && video.duration) { cb(); }
