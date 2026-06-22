@@ -182,7 +182,8 @@
           if (stickyEl && platformsEl) {
             var pr = platformsEl.getBoundingClientRect();
             var cover = Math.max(0, Math.min(1, (window.innerHeight - pr.top) / window.innerHeight));
-            gsap.set(stickyEl, { opacity: 1 - cover });
+            // SZYBKIE gaśnięcie: telefon znika zanim platformy się na niego nasuną (zero widocznego nachodzenia)
+            gsap.set(stickyEl, { opacity: Math.max(0, 1 - cover * 2.6) });
           }
         }
       });
