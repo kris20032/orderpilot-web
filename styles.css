@@ -207,7 +207,9 @@ section { position: relative; }
 
 /* ---------- PLATFORMS ---------- */
 /* podciągnięcie pod hero: kasuje 100svh „trailingu" przypiętego hero (telefon nie zjeżdża ponownie) */
-.platforms { padding: 30px 0 10px; position: relative; z-index: 1; background: var(--bg); }
+/* podciągnięcie pod gasnące hero — skraca pustą przestrzeń po telefonie; nieprzezroczyste + nad telefonem,
+   ale telefon i tak gaśnie do 0 przed odsłonięciem, więc brak prześwitu */
+.platforms { padding: 30px 0 10px; margin-top: -55svh; position: relative; z-index: 2; background: var(--bg); }
 .platforms__label { text-align: center; color: var(--faint); font-size: .82rem; font-weight: 500; letter-spacing: .03em; margin-bottom: 20px; }
 .platforms__list { list-style: none; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
 .chip { display: inline-flex; align-items: center; gap: 9px; padding: 8px 17px 8px 9px; border-radius: 999px; font-weight: 700; font-size: .95rem; letter-spacing: -.01em; background: rgba(255,255,255,.05); border: 1px solid var(--line-2); color: var(--brand, var(--text)); transition: border-color .18s, background .18s, transform .18s var(--ease); }
@@ -291,7 +293,7 @@ section { position: relative; }
 
 /* --- HERO: telefon-bohater (duży, wyśrodkowany, główna warstwa) --- */
 .hero.film { padding: 0; }
-.hero.film .film__sticky { height: 100svh; min-height: 560px; padding: 0; display: block; overflow: hidden; background: var(--bg); }
+.hero.film .film__sticky { height: 100svh; min-height: 560px; padding: 0; display: block; overflow: hidden; background: var(--bg); z-index: 0; }
 .hero .film__center { position: relative; height: 100%; display: grid;
   grid-template-rows: auto minmax(0,1fr); align-items: center; justify-items: center;
   gap: clamp(8px, 1.6vh, 20px); padding: clamp(20px,4vh,40px) 16px clamp(14px,2.4vh,28px); text-align: center; }
