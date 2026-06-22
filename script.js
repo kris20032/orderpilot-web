@@ -167,7 +167,10 @@
         onUpdate: function (self) {
           var p = self.progress, d = video.duration;
           var vp = p < SCRUB_END ? p / SCRUB_END : 1;       // postęp WIDEO (0..1) niezależny od fazy przejścia
-          if (d && isFinite(d)) {
+          // KLUCZOWE: synchronizuj podpisy z filmem TYLKO gdy film jest realnie gotowy do pokazania klatki
+          // (duration znane + readyState>=2). Inaczej film stoi na posterze (ekran startowy), a podpisy
+          // poleciałyby „na sucho" → rozjazd (np. podpis „03" przy ekranie startowym). Patrz: regresja 2026-06-22.
+          if (d && isFinite(d) && video.readyState >= 2) {
             var t = vp >= 0.999 ? d - 0.02 : vp * (d - 0.03);  // dobij do końcówki, ale nie do równego duration
             if (Math.abs(t - video.currentTime) > 0.005) { try { video.currentTime = t; } catch (e) {} }
             // beaty zsynchronizowane z momentami filmu: Start <2s · czeka <6.8s · wpada zlecenie <10.5s · decyzja
@@ -175,7 +178,9 @@
             focusEmphasis(t >= FOCUS_IN && t <= FOCUS_OUT); // reflektor pojawia się/znika dokładnie gdy belka jest na ekranie
             if (focusShown) setBelkaTop(belkaTopAt(t));     // halo + jasna strefa jadą za przeciąganą belką
           } else {
-            setBeat(Math.max(0, Math.min(BEATS - 1, Math.floor(vp * BEATS))));
+            // film jeszcze się wczytuje → trzymaj stan startowy ZGODNY z posterem (ekran „Start"): podpis 01, bez reflektora
+            setBeat(0);
+            focusEmphasis(false);
           }
           // PŁYNNE PRZEJŚCIE: telefon gaśnie DOKŁADNIE w takt podjeżdżających platform (crossfade) — tam gdzie
           // platformy już zakrywają, telefon jest przezroczysty → zero nachodzenia, brak pustej przestrzeni.
