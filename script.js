@@ -154,30 +154,36 @@
       video.preload = 'auto'; video.load();           // wymuś wczytanie (Chrome odracza offscreen)
       try { video.pause(); } catch (e) {}
       var stickyEl = film.querySelector('.film__sticky');
+      var platformsEl = document.querySelector('.platforms');
+      var SCRUB_END = 0.8;   // wideo scrubuje przez pierwsze 80% pinu; ostatnie 20% = płynne przejście do treści
       var st = ScrollTrigger.create({
         trigger: film,
         start: 'top top',
-        end: function () { return '+=' + (window.innerHeight * 4); },
+        end: function () { return '+=' + (window.innerHeight * 5); },  // +1 ekran na samo przejście
         pin: '.film__sticky',
         pinSpacing: true,
         scrub: 1,
         anticipatePin: 1,
         onUpdate: function (self) {
           var p = self.progress, d = video.duration;
+          var vp = p < SCRUB_END ? p / SCRUB_END : 1;       // postęp WIDEO (0..1) niezależny od fazy przejścia
           if (d && isFinite(d)) {
-            var t = p >= 0.999 ? d - 0.02 : p * (d - 0.03);  // dobij do końcówki, ale nie do równego duration
+            var t = vp >= 0.999 ? d - 0.02 : vp * (d - 0.03);  // dobij do końcówki, ale nie do równego duration
             if (Math.abs(t - video.currentTime) > 0.005) { try { video.currentTime = t; } catch (e) {} }
             // beaty zsynchronizowane z momentami filmu: Start <2s · czeka <6.8s · wpada zlecenie <10.5s · decyzja
             setBeat(t < 2 ? 0 : t < 6.8 ? 1 : t < 10.5 ? 2 : 3);
             focusEmphasis(t >= FOCUS_IN && t <= FOCUS_OUT); // reflektor pojawia się/znika dokładnie gdy belka jest na ekranie
             if (focusShown) setBelkaTop(belkaTopAt(t));     // halo + jasna strefa jadą za przeciąganą belką
           } else {
-            setBeat(Math.max(0, Math.min(BEATS - 1, Math.floor(p * BEATS))));
+            setBeat(Math.max(0, Math.min(BEATS - 1, Math.floor(vp * BEATS))));
           }
-          // KONIEC SCRUBU: hero GAŚNIE do tła zanim pin się zwolni → po odpięciu telefon jest już
-          // niewidoczny i nie „wraca" przewijając się w górę. BEZ ujemnego marginesu (to dawało prześwity).
-          var exit = p > 0.88 ? (p - 0.88) / 0.12 : 0;
-          if (stickyEl) gsap.set(stickyEl, { opacity: 1 - exit });
+          // PŁYNNE PRZEJŚCIE: telefon gaśnie DOKŁADNIE w takt podjeżdżających platform (crossfade) — tam gdzie
+          // platformy już zakrywają, telefon jest przezroczysty → zero nachodzenia, brak pustej przestrzeni.
+          if (stickyEl && platformsEl) {
+            var pr = platformsEl.getBoundingClientRect();
+            var cover = Math.max(0, Math.min(1, (window.innerHeight - pr.top) / window.innerHeight));
+            gsap.set(stickyEl, { opacity: 1 - cover });
+          }
         }
       });
       setBeat(0);
