@@ -153,6 +153,7 @@
       video.removeAttribute('autoplay'); video.removeAttribute('loop');
       video.preload = 'auto'; video.load();           // wymuś wczytanie (Chrome odracza offscreen)
       try { video.pause(); } catch (e) {}
+      var stickyEl = film.querySelector('.film__sticky');
       var st = ScrollTrigger.create({
         trigger: film,
         start: 'top top',
@@ -173,11 +174,15 @@
           } else {
             setBeat(Math.max(0, Math.min(BEATS - 1, Math.floor(p * BEATS))));
           }
+          // KONIEC SCRUBU: hero GAŚNIE do tła zanim pin się zwolni → po odpięciu telefon jest już
+          // niewidoczny i nie „wraca" przewijając się w górę. BEZ ujemnego marginesu (to dawało prześwity).
+          var exit = p > 0.88 ? (p - 0.88) / 0.12 : 0;
+          if (stickyEl) gsap.set(stickyEl, { opacity: 1 - exit });
         }
       });
       setBeat(0);
       video.addEventListener('loadedmetadata', function () { ScrollTrigger.refresh(); }, { once: true });
-      return function () { st.kill(); current = -1; };
+      return function () { st.kill(); current = -1; if (stickyEl) gsap.set(stickyEl, { opacity: 1 }); };
     });
 
     // MOBILE / reduced-motion — bez pinu: film gra autoplay-loop, wszystkie beaty widoczne (CSS)
