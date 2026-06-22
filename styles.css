@@ -540,3 +540,36 @@ html.js .hero__title { opacity: 0; }                 /* FOUC-guard: ukryty do an
   .story--js .story__step, .story--js .story__step.is-active { opacity: 1 !important; }
   html { scroll-behavior: auto; }
 }
+
+/* ===================================================================
+   TELEFON — uproszczony, czysty HERO (≤900px).
+   Powód: na desktopie hero to scrubowany scrollem „film" z podpisami
+   układanymi ABSOLUTNIE obok telefonu. Na telefonie (bez pinu/scrubu)
+   te podpisy zostawały position:absolute i NACHODZIŁY na tytuł — hero
+   „rozjeżdżał się". Tu sprowadzamy hero do prostego, pionowego stosu:
+   tytuł → telefon → jeden podpis („34 zł/h"). Reguły wyłącznie ≤900px,
+   więc widok na komputerze (≥901px) pozostaje BEZ ZMIAN.
+   =================================================================== */
+@media (max-width: 900px) {
+  /* hero rośnie naturalnie zamiast wymuszać pełną wysokość ekranu (było ~1050px z pustką) */
+  .hero.film .film__sticky { height: auto; min-height: 0; padding: 88px 0 48px; overflow: visible; }
+  .hero .film__center { gap: 20px; padding-left: 22px; padding-right: 22px; }
+
+  /* warstwa podpisów wraca do NORMALNEGO przepływu pod telefonem; pokazujemy tylko jeden, aktywny */
+  .hero .film__caps { position: static; inset: auto; display: block;
+    width: 100%; max-width: 340px; margin: 0 auto; min-height: 0; }
+  .hero .film__cap { position: static; inset: auto; grid-area: auto; margin: 0;
+    opacity: 1; transform: none; filter: none; text-align: center; }
+  .hero .film__cap:not(.is-active) { display: none; }   /* tylko aktywny podpis → zero nakładania */
+  .hero .film__cap-step { display: none; }               /* numer kroku („03") bez sensu bez animacji */
+  .hero .film__cap-big { margin: 4px 0 0; }
+  .hero .film__cap-sub { margin-top: 4px; }
+
+  /* telefon: równy rozmiar, niezależny od wysokości ekranu */
+  .hero .film__stage { height: auto; min-height: 0; }
+  .hero .phone--film { width: min(70vw, 230px); height: auto; max-height: none; }
+  .hero .film__video { width: 100%; height: auto; }
+
+  /* reflektor/halo na belce liczy JS tylko pod desktop — na telefonie zbędne */
+  .hero .film__focus { display: none; }
+}
